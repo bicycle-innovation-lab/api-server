@@ -1,0 +1,37 @@
+{
+  "name": "bil-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "nodemon -r dotenv/config dist/index.js",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^3.0.5",
+    "isemail": "^3.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "koa": "^2.7.0",
+    "koa-compose": "^4.1.0",
+    "koa-jwt": "^3.5.1",
+    "koa-router": "^7.4.0",
+    "mongoose": "^5.4.22",
+    "typegoose": "^5.6.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/jsonwebtoken": "^8.3.2",
+    "@types/koa": "^2.0.48",
+    "@types/koa-compose": "^3.2.3",
+    "@types/koa-router": "^7.0.40",
+    "@types/mongoose": "^5.3.24",
+    "dotenv": "^7.0.0",
+    "nodemon": "^1.18.10",
+    "typescript": "^3.4.2"
+  }
+}
