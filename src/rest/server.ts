@@ -1,7 +1,7 @@
 import * as Koa from "koa";
 import * as KoaJWT from "koa-jwt";
 import {Secret} from "../auth/token";
-import {Routes} from "./routes";
+import Routes from "./routes";
 import PopulateUser from "./middleware/populate-user";
 
 export const Server = new Koa();
