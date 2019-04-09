@@ -19,7 +19,7 @@ export class User extends Typegoose {
     @prop({required: true})
     phone!: string;
 
-    @arrayProp({itemsRef: Booking})
+    @arrayProp({itemsRef: Booking, default: []})
     bookings!: Ref<Booking>[];
 
     @prop({required: true})
