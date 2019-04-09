@@ -5,6 +5,7 @@ import {issueToken} from "../auth/token";
 import {compare, hash} from "../auth/hash";
 import {Role} from "../auth/role";
 import {Booking} from "./booking";
+import {cleanMongooseDocument} from "./utils";
 
 export class User extends Typegoose {
     @prop({required: true})
@@ -45,13 +46,13 @@ export class User extends Typegoose {
 
     @instanceMethod
     toCleanObject(this: User & Mongoose.Document) {
-        this.toObject({
+        return cleanMongooseDocument(this.toObject({
             transform(doc, ret) {
                 // drop passwordHash
                 const {passwordHash, ...cleaned} = ret;
                 return cleaned;
             }
-        })
+        }));
     }
 }
 
