@@ -4,19 +4,21 @@ const FormatMessage: Koa.Middleware = async (ctx, next) => {
     try {
         const data = await next();
         ctx.body = JSON.stringify({data, code: 200});
+        ctx.type = "json";
     } catch (err) {
-        if ((err.status || 500) >= 500) {
-            console.error("Internal error", err);
+        const status = err.status || 500;
+        if (status >= 500) {
+            ctx.app.emit("error", err, ctx);
         }
         const res = {
-            code: err.status || 500,
+            code: status,
             error: err.expose === true ?
                 err.message :
                 "Unknown Error"
         };
         ctx.body = JSON.stringify(res);
-    } finally {
         ctx.type = "json";
+        ctx.status = res.code;
     }
 };
 export default FormatMessage;
