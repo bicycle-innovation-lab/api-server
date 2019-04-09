@@ -4,6 +4,8 @@ export enum Role {
     Admin = "admin",
 }
 
+export const allRoles = Object.values(Role);
+
 export enum AuthLevel {
     NotSignedIn = -1,
     User = 0,
