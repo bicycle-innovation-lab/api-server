@@ -12,7 +12,7 @@ const FormatMessage: Koa.Middleware = async (ctx, next) => {
             code: err.status || 500,
             error: err.expose === true ?
                 err.message :
-                err.name || "Unknown Error"
+                "Unknown Error"
         };
         ctx.body = JSON.stringify(res);
     } finally {
