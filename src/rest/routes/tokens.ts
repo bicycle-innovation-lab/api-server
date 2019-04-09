@@ -9,7 +9,7 @@ const TokensRequestSchema = Joi.object({
 
 const TokensRouter = new Router();
 
-TokensRouter.post("/", async (ctx, next) => {
+TokensRouter.post("/", async ctx => {
     const body = await ctx.request.json();
 
     const {error, value} = Joi.validate(body, TokensRequestSchema);
