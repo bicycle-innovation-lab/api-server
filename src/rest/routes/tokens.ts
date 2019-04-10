@@ -1,11 +1,7 @@
 import * as Router from "koa-router";
 import * as Joi from "joi";
 import {UserModel} from "../../db/user";
-
-const TokensRequestSchema = Joi.object({
-    email: Joi.string().required(),
-    password: Joi.string().required()
-});
+import {TokensRequestSchema} from "../schema/tokens";
 
 const TokensRouter = new Router();
 
