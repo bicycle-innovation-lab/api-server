@@ -12,7 +12,7 @@ export const Server = new Koa();
 KoaBodyParser(Server);
 TestPermission(Server);
 
-Server.use(KoaJWT({secret: Secret, passthrough: true, key: "userToken"}));
+Server.use(KoaJWT({secret: Secret, passthrough: true, key: "authToken"}));
 Server.use(PopulateUser);
 
 Server.use(FormatResponse);

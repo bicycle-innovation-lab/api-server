@@ -4,7 +4,7 @@ import {User, UserModel} from "../../db/user";
 const PopulateUser: Koa.Middleware = async (ctx, next) => {
     ctx.state.getUser = async () => {
         // fetch user data if the user is signed in, and the user data has not yet been fetched from the db
-        if (!ctx.state.user && ctx.state.userToken) {
+        if (!ctx.state.user && ctx.state.authToken) {
             ctx.state.user = await UserModel.findById(ctx.state.userToken.sub);
         }
         return ctx.state.user as User | undefined;
