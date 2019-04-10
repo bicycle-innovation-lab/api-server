@@ -1,18 +1,23 @@
 import * as Koa from "koa";
-import {User, UserModel} from "../../db/user";
+import {UserModel} from "../../db/user";
 import {TokenType} from "../../auth/token";
 
 const PopulateUser: Koa.Middleware = async (ctx, next) => {
     if (ctx.state.authToken) {
         ctx.state.authType = ctx.state.authToken.type as TokenType;
     }
+
     ctx.state.authenticated = !!ctx.state.authToken;
-    ctx.state.getUser = async () => {
-        // fetch user data if the user is signed in, and the user data has not yet been fetched from the db
-        if (!ctx.state.user && ctx.state.authenticated) {
-            ctx.state.user = await UserModel.findById(ctx.state.authToken.sub);
+    ctx.state.session = ctx.state.authType === TokenType.Session;
+
+    ctx.state.getUser = () => ctx.state.session
+        ? ctx.state.getSubject()
+        : undefined;
+    ctx.state.getSubject = async () => {
+        if (!ctx.state.subject && ctx.state.authenticated) {
+            ctx.state.subject = UserModel.findById(ctx.state.authToken.sub);
         }
-        return ctx.state.user as User | undefined;
+        return ctx.state.subject;
     };
     return await next();
 };

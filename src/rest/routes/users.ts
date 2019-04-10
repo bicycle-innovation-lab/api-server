@@ -5,6 +5,7 @@ import GetUsers from "./users.get";
 import {AuthLevel} from "../../auth/role";
 
 export async function canSeeUser(id: string, ctx: Koa.BaseContext): Promise<boolean> {
+
     const signedIn = await ctx.state.getUser();
     if (!signedIn) {
         return false;
