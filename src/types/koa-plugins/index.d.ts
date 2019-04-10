@@ -20,6 +20,7 @@ declare module "koa" {
             /** Returns the currently signed in user, or undefined. */
             getUser(): Promise<UserDocument | undefined>;
             authType: TokenType;
+            authenticated: boolean;
         }
     }
 }
