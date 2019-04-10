@@ -1,5 +1,4 @@
 import * as Router from "koa-router";
-import * as Joi from "joi";
 import {UserModel} from "../../db/user";
 import {TokensRequestSchema} from "../schema/tokens";
 
@@ -8,7 +7,7 @@ const TokensRouter = new Router();
 TokensRouter.post("/", async ctx => {
     const body = await ctx.request.json();
 
-    const {error, value} = Joi.validate(body, TokensRequestSchema);
+    const {error, value} = TokensRequestSchema.validate(body);
     if (error) {
         ctx.throw(400, error.details[0].message)
     }
