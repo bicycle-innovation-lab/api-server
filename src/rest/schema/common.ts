@@ -1,5 +1,5 @@
 import * as Joi from "joi";
-import * as JoiPhoneNumber from "../../types/joi-phone-number";
+import * as JoiPhoneNumber from "joi-phone-number";
 import {allRoles} from "../../auth/role";
 
 export const joi = Joi.extend(JoiPhoneNumber);
