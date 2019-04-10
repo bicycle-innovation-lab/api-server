@@ -21,7 +21,7 @@ TokensRouter.post("/", async ctx => {
     const user = await UserModel.findOne({email});
 
     if (!user || !(await user.comparePassword(password))) {
-        ctx.throw(400, "Wrong email or password");
+        ctx.throw(422, "Wrong email or password");
     } else {
         return await user.issueToken();
     }
