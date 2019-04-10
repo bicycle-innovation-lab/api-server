@@ -5,7 +5,8 @@ import {TokenType} from "../../auth/token";
 export default function TestPermission(app: Koa) {
     app.context.testPermission = (async function(this: Koa.BaseContext, level: AuthLevel) {
         if (this.state.authType !== TokenType.Session) {
-            this.throw(403, "Invalid token type");
+            this.set("WWW-Authenticate", "Bearer");
+            this.throw(401, "Invalid token type");
         }
 
         const user = await this.state.getUser();
