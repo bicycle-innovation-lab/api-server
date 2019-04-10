@@ -5,7 +5,7 @@ if (!Secret) {
     console.warn("No JWT secret provided!");
 }
 
-enum TokenType {
+export enum TokenType {
     Session = "sess",
     PasswordReset = "pr",
 }
