@@ -49,8 +49,8 @@ UsersRouter.post("/", async ctx => {
 
 UsersRouter.get("/me", compose([
     RequirePermission(AuthLevel.User),
-    async (ctx: { state: any }) => {
-        const user: User & Mongoose.Document = await ctx.state.getUser();
+    async ctx => {
+        const user = await ctx.state.getUser() as User & Mongoose.Document;
         return user.toCleanObject();
     }
 ]));
