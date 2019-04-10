@@ -1,7 +1,7 @@
 import {arrayProp, instanceMethod, prop, Ref, Typegoose} from "typegoose";
 import * as Mongoose from "mongoose";
 import * as IsEmail from "isemail";
-import {issueToken} from "../auth/token";
+import {issueSessionToken} from "../auth/token";
 import {compare, hash} from "../auth/hash";
 import {Role} from "../auth/role";
 import {Booking} from "./booking";
@@ -31,7 +31,7 @@ export class User extends Typegoose {
 
     @instanceMethod
     issueToken(this: UserDocument) {
-        return issueToken(this.id);
+        return issueSessionToken(this.id);
     }
 
     @instanceMethod
