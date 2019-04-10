@@ -2,10 +2,6 @@ import * as Koa from "koa";
 import {AuthLevel, getRoleLevel} from "../../auth/role";
 
 export default function TestPermission(app: Koa) {
-    /**
-     * Only returns when the currently signed in user has sufficient permissions. Throws the appropriate error when the
-     * request unauthenticated, or has insufficient permissions.
-     */
     app.context.testPermission = (async function(this: Koa.BaseContext, level: AuthLevel) {
         const user = await this.state.getUser();
         if (user) {
