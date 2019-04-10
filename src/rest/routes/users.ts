@@ -2,7 +2,7 @@ import * as Router from "koa-router";
 import * as Mongoose from "mongoose";
 import * as Joi from "joi";
 import * as JoiPhoneNumber from "joi-phone-number";
-import RequirePermission, {testPermission} from "../middleware/require-permissions";
+import RequirePermission from "../middleware/require-permissions";
 import {allRoles, AuthLevel, getRoleLevel} from "../../auth/role";
 import {User, UserModel} from "../../db/user";
 import compose = require("koa-compose");
@@ -39,7 +39,7 @@ UsersRouter.post("/", async ctx => {
 
     // only admin can assign a role to a new user
     if (getRoleLevel(role) > AuthLevel.User) {
-        await testPermission(ctx, AuthLevel.Admin);
+        await ctx.testPermission(AuthLevel.Admin);
     }
 
     const user = new UserModel({

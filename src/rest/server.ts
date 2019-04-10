@@ -5,10 +5,12 @@ import {Secret} from "../auth/token";
 import Routes from "./routes";
 import PopulateUser from "./middleware/populate-user";
 import FormatResponse from "./middleware/format-message";
+import TestPermission from "./plugins/test-permissions";
 
 export const Server = new Koa();
 
 KoaBodyParser(Server);
+TestPermission(Server);
 
 Server.use(KoaJWT({secret: Secret, passthrough: true, key: "userToken"}));
 Server.use(PopulateUser);
