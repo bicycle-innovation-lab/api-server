@@ -1,3 +1,4 @@
+import * as Joi from "joi";
 import {AuthLevel} from "../../auth/role";
 
 declare module "koa" {
@@ -7,5 +8,8 @@ declare module "koa" {
          * request unauthenticated, or has insufficient permissions.
          */
         testPermission(level: AuthLevel): Promise<any>
+
+        validate(schema: Joi.Schema, doc: any): any;
+        validateBody(schema: Joi.Schema): Promise<any>;
     }
 }
