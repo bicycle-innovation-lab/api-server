@@ -6,14 +6,7 @@ import {issuePasswordResetToken} from "../../auth/token";
 const TokensRouter = new Router();
 
 TokensRouter.post("/session", async ctx => {
-    const body = await ctx.request.json();
-
-    const {error, value} = SessionTokenRequestSchema.validate(body);
-    if (error) {
-        ctx.throw(400, error.details[0].message)
-    }
-
-    const {email, password} = value;
+    const {email, password} = await ctx.validateBody(SessionTokenRequestSchema);
     const user = await UserModel.findOne({email});
 
     if (!user || !(await user.comparePassword(password))) {
