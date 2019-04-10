@@ -6,11 +6,13 @@ import Routes from "./routes";
 import PopulateUser from "./middleware/populate-user";
 import FormatResponse from "./middleware/format-message";
 import TestPermission from "./plugins/test-permissions";
+import JoiValidate from "./plugins/joi-validate";
 
 export const Server = new Koa();
 
 KoaBodyParser(Server);
 TestPermission(Server);
+JoiValidate(Server);
 
 Server.use(KoaJWT({secret: Secret, passthrough: true, key: "authToken"}));
 Server.use(PopulateUser);
