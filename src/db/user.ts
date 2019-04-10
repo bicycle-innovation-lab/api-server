@@ -30,7 +30,7 @@ export class User extends Typegoose {
     role!: Role;
 
     @instanceMethod
-    issueToken(this: User & Mongoose.Document) {
+    issueToken(this: UserDocument) {
         return issueToken(this.id);
     }
 
@@ -45,7 +45,7 @@ export class User extends Typegoose {
     }
 
     @instanceMethod
-    toCleanObject(this: User & Mongoose.Document) {
+    toCleanObject(this: UserDocument) {
         return cleanMongooseDocument(this.toObject({
             transform(doc, ret) {
                 // drop passwordHash
@@ -57,3 +57,4 @@ export class User extends Typegoose {
 }
 
 export const UserModel = new User().getModelForClass(User);
+export type UserDocument = User & Mongoose.Document;

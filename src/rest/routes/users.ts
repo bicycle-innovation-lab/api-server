@@ -1,9 +1,8 @@
 import * as Router from "koa-router";
-import * as Mongoose from "mongoose";
 import * as compose from "koa-compose";
 import RequirePermission from "../middleware/require-permissions";
 import {AuthLevel, getRoleLevel} from "../../auth/role";
-import {User, UserModel} from "../../db/user";
+import {UserDocument, UserModel} from "../../db/user";
 import {CreateUserRequestSchema} from "../schema/users";
 
 const UsersRouter = new Router();
@@ -50,7 +49,7 @@ UsersRouter.post("/", async ctx => {
 UsersRouter.get("/me", compose([
     RequirePermission(AuthLevel.User),
     async ctx => {
-        const user = await ctx.state.getUser() as User & Mongoose.Document;
+        const user = await ctx.state.getUser() as UserDocument;
         return user.toCleanObject();
     }
 ]));

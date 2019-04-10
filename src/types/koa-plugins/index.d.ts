@@ -1,6 +1,6 @@
 import * as Joi from "joi";
 import {AuthLevel} from "../../auth/role";
-import {User} from "../../db/user";
+import {UserDocument} from "../../db/user";
 
 declare module "koa" {
 
@@ -16,7 +16,7 @@ declare module "koa" {
 
         state: {
             /** Returns the currently signed in user, or undefined. */
-            getUser(): Promise<User | undefined>;
+            getUser(): Promise<UserDocument | undefined>;
         }
     }
 }
