@@ -1,22 +1,10 @@
 import * as Router from "koa-router";
 import * as Mongoose from "mongoose";
-import * as Joi from "joi";
-import * as JoiPhoneNumber from "joi-phone-number";
 import RequirePermission from "../middleware/require-permissions";
-import {allRoles, AuthLevel, getRoleLevel} from "../../auth/role";
+import {AuthLevel, getRoleLevel} from "../../auth/role";
 import {User, UserModel} from "../../db/user";
 import compose = require("koa-compose");
-
-const joi = Joi.extend(JoiPhoneNumber);
-
-const CreateUserRequestSchema = joi.object({
-    first_name: joi.string().required(),
-    last_name: joi.string().required(),
-    email: joi.string().email().required(),
-    phone: joi.string().phoneNumber().required(),
-    password: joi.string().max(72).required(),
-    role: joi.string().default("user").valid(allRoles).optional()
-});
+import {CreateUserRequestSchema} from "../schema/users";
 
 const UsersRouter = new Router();
 
