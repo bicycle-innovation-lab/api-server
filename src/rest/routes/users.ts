@@ -2,7 +2,7 @@ import * as Router from "koa-router";
 import * as compose from "koa-compose";
 import RequirePermission from "../middleware/require-permissions";
 import {AuthLevel, getRoleLevel} from "../../auth/role";
-import {UserDocument, UserModel} from "../../db/user";
+import {UserModel} from "../../db/user";
 import {CreateUserRequestSchema} from "../schema/users";
 
 const UsersRouter = new Router();
@@ -46,11 +46,22 @@ UsersRouter.post("/", async ctx => {
     return user.toCleanObject();
 });
 
-UsersRouter.get("/me", compose([
+UsersRouter.get("/:id", compose([
     RequirePermission(AuthLevel.User),
     async ctx => {
-        const user = await ctx.state.getUser() as UserDocument;
-        return user.toCleanObject();
+        const {id} = ctx.params;
+        if (id !== "me") {
+            // only managers and up can get info about other users
+            await ctx.testPermission(AuthLevel.Manager);
+        }
+        const user = id === "me"
+            ? await ctx.state.getUser()
+            : await UserModel.findOne({_id: id});
+        if (!user) {
+            ctx.throw(404);
+        } else {
+            return user.toCleanObject();
+        }
     }
 ]));
 
