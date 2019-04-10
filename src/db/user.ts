@@ -3,7 +3,7 @@ import * as Mongoose from "mongoose";
 import * as IsEmail from "isemail";
 import {issueSessionToken} from "../auth/token";
 import {compare, hash} from "../auth/hash";
-import {Role} from "../auth/role";
+import {getRoleLevel, Role} from "../auth/role";
 import {Booking} from "./booking";
 import {cleanMongooseDocument} from "./utils";
 
@@ -28,6 +28,11 @@ export class User extends Typegoose {
 
     @prop({required: true, enum: Role})
     role!: Role;
+
+    @prop()
+    get authLevel() {
+        return getRoleLevel(this.role);
+    }
 
     @instanceMethod
     issueToken(this: UserDocument) {

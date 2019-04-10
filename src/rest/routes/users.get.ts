@@ -1,5 +1,5 @@
 import * as Koa from "koa";
-import {AuthLevel, getRoleLevel} from "../../auth/role";
+import {AuthLevel} from "../../auth/role";
 import {UserModel} from "../../db/user";
 
 const GetUsers: Koa.Middleware = async ctx => {
@@ -11,7 +11,7 @@ const GetUsers: Koa.Middleware = async ctx => {
     const isMe = id === "me";
     if (!isMe) {
         // only managers can get other users data
-        if (getRoleLevel(signedIn.role) < AuthLevel.Manager) {
+        if (signedIn.authLevel < AuthLevel.Manager) {
             return ctx.throw(404);
         }
     }
