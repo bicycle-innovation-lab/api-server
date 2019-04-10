@@ -1,8 +1,10 @@
 import * as Joi from "joi";
 import {AuthLevel} from "../../auth/role";
 import {UserDocument} from "../../db/user";
+import {TokenType} from "../../auth/token";
 
 declare module "koa" {
+
 
     interface BaseContext {
         /**
@@ -17,6 +19,7 @@ declare module "koa" {
         state: {
             /** Returns the currently signed in user, or undefined. */
             getUser(): Promise<UserDocument | undefined>;
+            authType: TokenType;
         }
     }
 }
