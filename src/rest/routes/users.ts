@@ -1,20 +1,15 @@
 import * as Router from "koa-router";
 import * as Mongoose from "mongoose";
+import * as compose from "koa-compose";
 import RequirePermission from "../middleware/require-permissions";
 import {AuthLevel, getRoleLevel} from "../../auth/role";
 import {User, UserModel} from "../../db/user";
-import compose = require("koa-compose");
 import {CreateUserRequestSchema} from "../schema/users";
 
 const UsersRouter = new Router();
 
 UsersRouter.post("/", async ctx => {
-    const body = await ctx.request.json();
-
-    const {error, value} = CreateUserRequestSchema.validate(body);
-    if (error) {
-        ctx.throw(400, error.details[0].message);
-    }
+    const value = await ctx.validateBody(CreateUserRequestSchema);
 
     const {
         first_name: firstName,
