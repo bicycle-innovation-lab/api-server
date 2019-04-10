@@ -22,5 +22,5 @@ export default function TestPermission(app: Koa) {
             this.set("WWW-Authenticate", "Bearer");
             this.throw(401, "Not authenticated");
         }
-    }).bind(app.context);
+    });
 }

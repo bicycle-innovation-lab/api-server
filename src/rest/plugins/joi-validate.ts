@@ -8,10 +8,10 @@ export default function JoiValidate(app: Koa) {
             this.throw(400, error.details[0].message);
         }
         return value;
-    }).bind(app.context);
+    });
 
     app.context.validateBody = (async function(this: Koa.BaseContext, schema: Joi.Schema) {
         const body = await this.request.json();
         return this.validate(schema, body);
-    }).bind(app.context);
+    });
 }
