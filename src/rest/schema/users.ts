@@ -1,13 +1,5 @@
-import * as Joi from "joi";
-import * as JoiPhoneNumber from "../../types/joi-phone-number";
-import {allRoles, Role as Roles} from "../../auth/role";
-
-const joi = Joi.extend(JoiPhoneNumber);
-
-const Password = () => joi.string().max(72);
-const Email = () => joi.string().email();
-const Phone = () => joi.string().phoneNumber();
-const Role = () => joi.string().valid(allRoles);
+import {Role as Roles} from "../../auth/role";
+import {joi, Email, Password, Phone, Role} from "./common";
 
 export const CreateUserRequestSchema = joi.object({
     first_name: joi.string().required(),
