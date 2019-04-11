@@ -19,7 +19,7 @@ const PopulateUser: Koa.Middleware = async (ctx, next) => {
             if (!subject) {
                 ctx.state.subject = null;
             } else {
-                const issued = new Date(ctx.state.authToken.iat);
+                const issued = new Date(ctx.state.authToken.iat * 1000);
                 if (issued < subject.tokensNotBefore) {
                     ctx.state.subject = null;
                 } else {
