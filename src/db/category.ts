@@ -1,10 +1,10 @@
-import {arrayProp, instanceMethod, pre, prop, Typegoose} from "typegoose";
+import {arrayProp, instanceMethod, pre, prop, staticMethod, Typegoose} from "typegoose";
 import * as slug from "slug";
 import * as Mongoose from "mongoose";
 import Image from "./image";
 import {cleanMongooseDocument} from "./utils";
 
-@pre("save", function(this: Category, next) {
+@pre("save", function (this: Category, next) {
     // noinspection JSPotentiallyInvalidUsageOfClassThis
     this.slug = slug(this.title);
     return next();
@@ -27,6 +27,15 @@ export class Category extends Typegoose {
     toCleanObject(this: CategoryDocument) {
         return cleanMongooseDocument(this.toObject());
     }
+
+    @staticMethod
+    static findBySlugOrId(id: string): Promise<CategoryDocument | null> {
+        return CategoryModel.findOne().or([
+            {_id: id},
+            {slug: id}
+        ]).exec();
+    }
 }
+
 export const CategoryModel = new Category().getModelForClass(Category);
 export type CategoryDocument = Category & Mongoose.Document;
