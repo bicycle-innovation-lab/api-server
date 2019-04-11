@@ -14,8 +14,18 @@ const PopulateUser: Koa.Middleware = async (ctx, next) => {
         ? ctx.state.getSubject()
         : undefined;
     ctx.state.getSubject = async () => {
-        if (!ctx.state.subject && ctx.state.authenticated) {
-            ctx.state.subject = UserModel.findById(ctx.state.authToken.sub);
+        if (ctx.state.subject === undefined && ctx.state.authenticated) {
+            const subject = await UserModel.findById(ctx.state.authToken.sub);
+            if (!subject) {
+                ctx.state.subject = null;
+            } else {
+                const issued = new Date(ctx.state.authToken.iat);
+                if (issued < subject.tokensNotBefore) {
+                    ctx.state.subject = null;
+                } else {
+                    ctx.state.subject = subject;
+                }
+            }
         }
         return ctx.state.subject;
     };

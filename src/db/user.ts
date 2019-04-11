@@ -29,6 +29,13 @@ export class User extends Typegoose {
     @prop({required: true, enum: Role})
     role!: Role;
 
+    /**
+     * Session tokens issued before this should not be considered valid. This value is updated, for example, when the
+     * users password changes. This causes all session tokens issued with the old password to become invalid.
+     */
+    @prop({required: true, default: new Date(0)})
+    tokensNotBefore!: Date;
+
     @prop()
     get authLevel() {
         return getRoleLevel(this.role);
@@ -47,15 +54,23 @@ export class User extends Typegoose {
     @instanceMethod
     async setPassword(password: string) {
         this.passwordHash = await hash(password);
+        this.tokensNotBefore = new Date(Date.now());
     }
 
     @instanceMethod
     toCleanObject(this: UserDocument) {
         return cleanMongooseDocument(this.toObject({
             transform(doc, ret) {
-                // drop passwordHash
-                const {passwordHash, ...cleaned} = ret;
-                return cleaned;
+                // pick values that can be exposed to clients
+                const {
+                    firstName,
+                    lastName,
+                    email,
+                    phone,
+                    bookings,
+                    role
+                } = ret;
+                return {firstName, lastName, email, phone, bookings, role};
             }
         }));
     }
