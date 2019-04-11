@@ -4,9 +4,9 @@ import * as Mongoose from "mongoose";
 import Image from "./image";
 import {cleanMongooseDocument} from "./utils";
 
-@pre("save", function (this: Category, next) {
+@pre("validate", function (this: Category, next) {
     // noinspection JSPotentiallyInvalidUsageOfClassThis
-    this.slug = slug(this.title);
+    this.slug = slug(this.title, {lower: true});
     return next();
 })
 export class Category extends Typegoose {
