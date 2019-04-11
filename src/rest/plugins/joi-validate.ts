@@ -5,7 +5,7 @@ export default function JoiValidate(app: Koa) {
     app.context.validate = (function(this: Koa.BaseContext, schema: Joi.Schema, doc: any) {
         const {error, value} = schema.validate(doc);
         if (error) {
-            this.throw(400, error.details[0].message);
+            this.throw(400, error.message);
         }
         return value;
     });
