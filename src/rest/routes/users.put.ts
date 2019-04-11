@@ -39,7 +39,7 @@ const PutUsers: Koa.Middleware = async ctx => {
 
     if (form.role) {
         // only admins can change user roles
-        ctx.testPermission(AuthLevel.Admin);
+        await ctx.testPermission(AuthLevel.Admin);
         user.role = form.role;
     }
     if (form.password && isMe) {
