@@ -3,6 +3,7 @@ import * as slug from "slug";
 import * as Mongoose from "mongoose";
 import Image from "./image";
 import {cleanMongooseDocument} from "./utils";
+import {ObjectId} from "../rest/schema/common";
 
 @pre("validate", function (this: Category, next) {
     // noinspection JSPotentiallyInvalidUsageOfClassThis
@@ -30,10 +31,11 @@ export class Category extends Typegoose {
 
     @staticMethod
     static findBySlugOrId(id: string): Promise<CategoryDocument | null> {
-        return CategoryModel.findOne().or([
-            {_id: id},
-            {slug: id}
-        ]).exec();
+        if (ObjectId().validate(id).error) {
+            return CategoryModel.findOne({slug: id}).exec();
+        } else {
+            return CategoryModel.findById(id).exec();
+        }
     }
 }
 
