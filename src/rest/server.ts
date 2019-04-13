@@ -1,6 +1,7 @@
 import * as Koa from "koa";
 import * as KoaJWT from "koa-jwt";
 import * as KoaBodyParser from "koa-body-parsers";
+import * as cors from "@koa/cors";
 import {Secret} from "../auth/token";
 import Routes from "./routes";
 import PopulateUser from "./middleware/populate-user";
@@ -20,6 +21,8 @@ Server.use(PopulateUser);
 
 Server.use(FormatResponse);
 
+// Change origin before release
+Server.use(cors({origin: '*'}))
 Server.use(Routes.routes());
 Server.use(Routes.allowedMethods());
 
