@@ -1,6 +1,8 @@
-import {arrayProp, prop, Ref, Typegoose} from "typegoose";
+import {arrayProp, instanceMethod, prop, Ref, Typegoose} from "typegoose";
+import * as Mongoose from "mongoose";
 import Image from "./image";
 import {Category} from "./category";
+import {cleanMongooseDocument} from "./utils";
 
 export class Bike extends Typegoose {
     @prop({required: true})
@@ -20,5 +22,11 @@ export class Bike extends Typegoose {
 
     @arrayProp({required: true, itemsRef: Category})
     categories!: Ref<Category>[];
+
+    @instanceMethod
+    toCleanObject(this: BikeDocument) {
+        return cleanMongooseDocument(this.toObject());
+    }
 }
 export const BikeModel = new Bike().getModelForClass(Bike);
+export type BikeDocument = Bike & Mongoose.Document;

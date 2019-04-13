@@ -4,8 +4,6 @@ import {UserDocument} from "../../db/user";
 import {TokenType} from "../../auth/token";
 
 declare module "koa" {
-
-
     interface BaseContext {
         /**
          * Only returns when the currently signed in user has sufficient permissions. Throws the appropriate error when the
@@ -17,9 +15,14 @@ declare module "koa" {
         validateBody(schema: Joi.Schema): Promise<any>;
 
         state: {
-            /** Returns the currently signed in user, or undefined. */
+            /** Returns the currently signed in user of the current session. */
             getUser(): Promise<UserDocument | undefined>;
+            /** Returns the subject of the current authentication token. */
+            getSubject(): Promise<UserDocument | undefined>
             authType: TokenType;
+            authenticated: boolean;
+            /** Whether the current authentication is a user session. */
+            session: boolean;
         }
     }
 }

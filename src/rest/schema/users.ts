@@ -8,4 +8,18 @@ export const CreateUserRequestSchema = joi.object({
     phone: Phone().required(),
     password: Password().required(),
     role: Role().default(Roles.User).optional()
-});
+}).required();
+
+export const UpdateUserRequestSchema = joi.object({
+    first_name: joi.string(),
+    last_name: joi.string(),
+    email: Email(),
+    phone: Phone(),
+    password: Password(),
+    current_password: Password(),
+    role: Role(),
+}).with("password", "current_password").required();
+
+export const ResetPasswordRequestSchema = joi.object({
+    password: Password().required()
+}).required();
