@@ -14,6 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@koa/cors": "^2.2.3",
     "bcrypt": "^3.0.5",
     "isemail": "^3.2.0",
     "joi": "^14.3.1",
@@ -35,6 +36,7 @@
     "@types/koa": "^2.0.48",
     "@types/koa-compose": "^3.2.3",
     "@types/koa-router": "^7.0.40",
+    "@types/koa__cors": "^2.2.3",
     "@types/mongoose": "^5.3.24",
     "@types/slug": "^0.9.1",
     "dotenv": "^7.0.0",
