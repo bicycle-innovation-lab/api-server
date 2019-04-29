@@ -21,8 +21,8 @@ Server.use(PopulateUser);
 
 Server.use(FormatResponse);
 
-// Change origin before release
-Server.use(cors({origin: '*'}))
+// TODO: Change origin before release
+Server.use(cors({origin: '*'}));
 Server.use(Routes.routes());
 Server.use(Routes.allowedMethods());
 
