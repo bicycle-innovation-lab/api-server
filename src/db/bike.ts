@@ -1,6 +1,6 @@
 import {arrayProp, instanceMethod, prop, Ref, Typegoose} from "typegoose";
 import * as Mongoose from "mongoose";
-import Image from "./image";
+import ImageRef from "./image-ref";
 import {Category} from "./category";
 import {cleanMongooseDocument} from "./utils";
 
@@ -11,8 +11,8 @@ export class Bike extends Typegoose {
     @prop({required: true})
     description!: string;
 
-    @arrayProp({items: Image})
-    images!: Image[];
+    @arrayProp({items: ImageRef})
+    images!: ImageRef[];
 
     @prop({required: true})
     price!: number;

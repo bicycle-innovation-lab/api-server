@@ -1,6 +1,6 @@
 import {prop, Typegoose} from "typegoose";
 
-export default class Image extends Typegoose {
+export default class ImageRef extends Typegoose {
     @prop({required: true})
     title!: string;
 

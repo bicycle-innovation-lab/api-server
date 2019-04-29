@@ -1,7 +1,7 @@
 import {arrayProp, instanceMethod, pre, prop, staticMethod, Typegoose} from "typegoose";
 import * as slug from "slug";
 import * as Mongoose from "mongoose";
-import Image from "./image";
+import ImageRef from "./image-ref";
 import {cleanMongooseDocument} from "./utils";
 import {ObjectId} from "../rest/schema/common";
 
@@ -21,8 +21,8 @@ export class Category extends Typegoose {
     @prop({required: true})
     description!: string;
 
-    @arrayProp({items: Image})
-    image!: Image[];
+    @arrayProp({items: ImageRef})
+    image!: ImageRef[];
 
     @instanceMethod
     toCleanObject(this: CategoryDocument) {
