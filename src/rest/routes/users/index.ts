@@ -3,7 +3,7 @@ import * as Router from "koa-router";
 import PostUsers from "./users.post";
 import GetUsers from "./users.get";
 import PutUsers from "./users.put";
-import {AuthLevel} from "../../auth/role";
+import {AuthLevel} from "../../../auth/role";
 
 export async function canSeeUser(id: string, ctx: Koa.BaseContext): Promise<boolean> {
 

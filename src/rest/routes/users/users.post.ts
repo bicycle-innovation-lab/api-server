@@ -1,7 +1,7 @@
 import * as Koa from "koa";
-import {CreateUserRequestSchema} from "../schema/users";
-import {AuthLevel, getRoleLevel} from "../../auth/role";
-import {UserModel} from "../../db/user";
+import {CreateUserRequestSchema} from "../../schema/users";
+import {AuthLevel, getRoleLevel} from "../../../auth/role";
+import {UserModel} from "../../../db/user";
 
 const PostUsers: Koa.Middleware = async ctx => {
     const value = await ctx.validateBody(CreateUserRequestSchema);

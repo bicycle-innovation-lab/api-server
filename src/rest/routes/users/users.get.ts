@@ -1,6 +1,6 @@
 import * as Koa from "koa";
-import {UserModel} from "../../db/user";
-import {canSeeUser} from "./users";
+import {UserModel} from "../../../db/user";
+import {canSeeUser} from "./index";
 
 const GetUsers: Koa.Middleware = async ctx => {
     const {id} = ctx.params;

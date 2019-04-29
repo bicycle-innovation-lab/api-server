@@ -1,9 +1,9 @@
 import * as Koa from "koa";
-import {TokenType} from "../../auth/token";
-import {UserDocument, UserModel} from "../../db/user";
-import {ResetPasswordRequestSchema, UpdateUserRequestSchema} from "../schema/users";
-import {canSeeUser} from "./users";
-import {AuthLevel} from "../../auth/role";
+import {TokenType} from "../../../auth/token";
+import {UserDocument, UserModel} from "../../../db/user";
+import {ResetPasswordRequestSchema, UpdateUserRequestSchema} from "../../schema/users";
+import {canSeeUser} from "./index";
+import {AuthLevel} from "../../../auth/role";
 
 const PutUsers: Koa.Middleware = async ctx => {
     const {id} = ctx.params;
