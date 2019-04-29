@@ -1,5 +1,5 @@
 import * as Koa from "koa";
-import {Category, CategoryModel} from "../../db/category";
+import {Category, CategoryModel} from "../../../db/category";
 
 export const GetMultipleCategories: Koa.Middleware = async () => {
     return (await CategoryModel.find()).map(it => it.toCleanObject());
