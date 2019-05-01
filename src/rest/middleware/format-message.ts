@@ -3,7 +3,11 @@ import * as Koa from "koa";
 const FormatMessage: Koa.Middleware = async (ctx, next) => {
     try {
         const data = await next();
-        ctx.body = JSON.stringify({data, code: 200});
+        const status = ctx.status;
+        if (status >= 400) {
+            ctx.throw(status, data);
+        }
+        ctx.body = JSON.stringify({data, code: status});
         ctx.type = "json";
     } catch (err) {
         const status = err.status || 500;

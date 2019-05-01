@@ -14,6 +14,7 @@ const GetUsers: Koa.Middleware = async ctx => {
     if (!user) {
         ctx.throw(404);
     } else {
+        ctx.status = 200;
         return user.toCleanObject();
     }
 };

@@ -11,6 +11,7 @@ const PostCategories: Koa.Middleware = compose([
         const {title, description} = await ctx.validateBody(CreateCategoryRequestSchema);
         const category = new CategoryModel({title, description});
         await category.save();
+        ctx.status = 201;
         return category.toCleanObject();
     }
 ]);

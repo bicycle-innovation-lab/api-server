@@ -10,6 +10,7 @@ export const GetOneCategory: Koa.Middleware = async ctx => {
     if (!cat) {
         ctx.throw(404);
     } else {
+        ctx.status = 200;
         return cat;
     }
 };

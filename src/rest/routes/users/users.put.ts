@@ -55,6 +55,7 @@ const PutUsers: Koa.Middleware = async ctx => {
     user.phone = form.phone || user.phone;
 
     await user.save();
+    ctx.status = 200;
     return user.toCleanObject();
 };
 

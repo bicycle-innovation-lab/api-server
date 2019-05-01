@@ -11,6 +11,7 @@ const PostBikes: Koa.Middleware = compose([
         const {title, description, price, categories} = await ctx.validateBody(CreateBikeRequestSchema);
         const bike = new BikeModel({title,description,price,categories});
         await bike.save();
+        ctx.status = 201;
         return bike.toCleanObject();
     }
 ]);

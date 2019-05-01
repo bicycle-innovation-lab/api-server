@@ -18,6 +18,7 @@ const PutCategories: Koa.Middleware = compose([
         category.title = title || category.title;
         category.description = description || category.description;
         await category.save();
+        ctx.status = 200;
         return category.toCleanObject();
     }
 ]);

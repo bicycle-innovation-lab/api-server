@@ -39,6 +39,7 @@ const PostUsers: Koa.Middleware = async ctx => {
         }
     }
 
+    ctx.status = 201;
     return user.toCleanObject();
 };
 

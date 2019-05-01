@@ -15,6 +15,7 @@ export const GetOneBike: Koa.Middleware = async ctx => {
     if (!bike) {
         ctx.throw(404);
     } else {
+        ctx.status = 200;
         return bike;
     }
 };
