@@ -3,6 +3,7 @@ import * as Koa from "koa";
 const FormatMessage: Koa.Middleware = async (ctx, next) => {
     try {
         const data = await next();
+        if (ctx.skipMessageFormatting) return;
         const status = ctx.status;
         if (status >= 400) {
             ctx.throw(status, data);
