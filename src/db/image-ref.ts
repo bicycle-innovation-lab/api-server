@@ -1,4 +1,5 @@
-import {prop, Typegoose} from "typegoose";
+import {prop, Ref, Typegoose} from "typegoose";
+import {Image} from "./image";
 
 export default class ImageRef extends Typegoose {
     @prop({required: true})
@@ -7,9 +8,6 @@ export default class ImageRef extends Typegoose {
     @prop({required: true})
     alt!: string;
 
-    @prop({required: true})
-    smallImage!: string;
-
-    @prop({required: true})
-    largeImage!: string;
+    @prop({required: true, ref: Image})
+    image!: Ref<Image>
 }

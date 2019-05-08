@@ -15,6 +15,8 @@
   "license": "ISC",
   "dependencies": {
     "@koa/cors": "^2.2.3",
+    "@types/busboy": "^0.2.3",
+    "async-busboy": "^0.7.0",
     "bcrypt": "^3.0.5",
     "isemail": "^3.2.0",
     "joi": "^14.3.1",
@@ -26,7 +28,10 @@
     "koa-jwt": "^3.5.1",
     "koa-router": "^7.4.0",
     "mongoose": "^5.4.22",
+    "sharp": "^0.22.1",
     "slug": "^1.1.0",
+    "streamifier": "^0.1.1",
+    "streamsink": "^1.2.0",
     "typegoose": "^5.6.0"
   },
   "devDependencies": {
@@ -38,6 +43,7 @@
     "@types/koa-router": "^7.0.40",
     "@types/koa__cors": "^2.2.3",
     "@types/mongoose": "^5.3.24",
+    "@types/sharp": "^0.22.1",
     "@types/slug": "^0.9.1",
     "dotenv": "^7.0.0",
     "nodemon": "^1.18.10",
