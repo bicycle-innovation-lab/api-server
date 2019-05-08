@@ -9,3 +9,8 @@ export const Email = () => joi.string().email();
 export const Phone = () => joi.string().phoneNumber();
 export const Role = () => joi.string().valid(allRoles);
 export const ObjectId = () => joi.string().hex().length(24);
+export const ImageArray = () => joi.array().items(joi.object({
+    title: joi.string().required(),
+    alt: joi.string().required(),
+    image: ObjectId().required()
+}));
