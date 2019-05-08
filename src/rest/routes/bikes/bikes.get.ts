@@ -16,6 +16,6 @@ export const GetOneBike: Koa.Middleware = async ctx => {
         ctx.throw(404);
     } else {
         ctx.status = 200;
-        return bike;
+        return bike.toCleanObject();
     }
 };
