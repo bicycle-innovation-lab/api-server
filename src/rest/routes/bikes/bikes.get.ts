@@ -2,7 +2,8 @@ import * as Koa from "koa";
 import {BikeModel} from "../../../db/bike";
 import {ObjectId} from "../../schema/common";
 
-export const GetMultipleBikes: Koa.Middleware = async () => {
+export const GetMultipleBikes: Koa.Middleware = async ctx => {
+    ctx.status = 200;
     return (await BikeModel.find()).map(it => it.toCleanObject());
 };
 
