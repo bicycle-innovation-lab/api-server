@@ -24,7 +24,7 @@ const PostImage: Koa.Middleware = async ctx => {
     }
     await image.save();
 
-    ctx.status = 200;
+    ctx.status = 201;
     return image.toCleanObject();
 };
 export default PostImage;
