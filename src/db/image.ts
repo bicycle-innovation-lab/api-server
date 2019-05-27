@@ -54,11 +54,17 @@ export class Image extends Typegoose {
     @prop({required: true})
     fileName!: string;
 
+    @prop({required: true})
+    title!: string;
+
+    @prop({required: true})
+    alt!: string;
+
     @arrayProp({items: ImageVariant})
     variants!: ImageVariant[];
 
     @staticMethod
-    static async createImage(name: string, source: ReadStream, variants: ImageVariantType[]): Promise<ImageDocument | null> {
+    static async createImage(name: string, title: string, alt: string, source: ReadStream, variants: ImageVariantType[]): Promise<ImageDocument | null> {
         // convert source image to proper format
         const buf = await streamToBuffer(source);
         const original = await convert(buf);
@@ -91,13 +97,21 @@ export class Image extends Typegoose {
 
         return new ImageModel({
             fileName: name,
+            title,
+            alt,
             variants: resizedVariants
         })
     }
 
     @instanceMethod
     toCleanObject(this: ImageDocument) {
-        return cleanMongooseDocument(this.toObject());
+        return this.toObject({
+            transform(doc, ret) {
+                ret.id = new ObjectID(ret._id);
+                delete ret._id;
+                delete ret.__v;
+            }
+        });
     }
 }
 

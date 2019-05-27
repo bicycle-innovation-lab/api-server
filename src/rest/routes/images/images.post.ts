@@ -1,6 +1,7 @@
 import * as Koa from "koa";
 import * as Busboy from "async-busboy";
 import {Image, ImageVariantType} from "../../../db/image";
+import {CreateImageRequestSchema} from "../../schema/images";
 
 const PostImage: Koa.Middleware = async ctx => {
     const {files, fields} = await Busboy(ctx.req);
@@ -14,7 +15,9 @@ const PostImage: Koa.Middleware = async ctx => {
     }
     const {filename: name} = file;
 
-    const image = await Image.createImage(name, file, [
+    const {title, alt} = ctx.validate(CreateImageRequestSchema, fields);
+
+    const image = await Image.createImage(name, title, alt, file, [
         ImageVariantType.Original,
         ImageVariantType.Small,
         ImageVariantType.Large
