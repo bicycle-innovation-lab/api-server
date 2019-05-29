@@ -1,9 +1,9 @@
-import {arrayProp, instanceMethod, pre, prop, staticMethod, Typegoose} from "typegoose";
+import {arrayProp, instanceMethod, pre, prop, Ref, staticMethod, Typegoose} from "typegoose";
 import * as slug from "slug";
 import * as Mongoose from "mongoose";
-import ImageRef from "./image-ref";
 import {cleanMongooseDocument} from "./utils";
 import {ObjectId} from "../rest/schema/common";
+import {Image} from "./image";
 
 @pre("validate", function (this: Category, next) {
     // noinspection JSPotentiallyInvalidUsageOfClassThis
@@ -21,8 +21,8 @@ export class Category extends Typegoose {
     @prop({required: true})
     description!: string;
 
-    @arrayProp({items: ImageRef})
-    image!: ImageRef[];
+    @arrayProp({itemsRef: Image})
+    image!: Ref<Image>[];
 
     @instanceMethod
     toCleanObject(this: CategoryDocument) {

@@ -12,7 +12,8 @@ const PostUsers: Koa.Middleware = async ctx => {
         email,
         phone,
         password,
-        role
+        role,
+        avatar
     } = value;
 
     // only admin can assign a role to a new user
@@ -25,7 +26,8 @@ const PostUsers: Koa.Middleware = async ctx => {
         lastName,
         email,
         phone,
-        role
+        role,
+        avatar
     });
     await user.setPassword(password);
     try {
