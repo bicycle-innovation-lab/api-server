@@ -2,7 +2,7 @@ import * as Koa from "koa";
 import {UserModel} from "../../../db/user";
 import {canSeeUser} from "./index";
 
-const GetUsers: Koa.Middleware = async ctx => {
+const GetOneUser: Koa.Middleware = async ctx => {
     const {id} = ctx.params;
     if (!await canSeeUser(id, ctx)) {
         ctx.throw(404);
@@ -19,4 +19,4 @@ const GetUsers: Koa.Middleware = async ctx => {
     }
 };
 
-export default GetUsers;
+export default GetOneUser;
