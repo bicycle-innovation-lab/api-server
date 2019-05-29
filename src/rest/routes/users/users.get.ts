@@ -1,8 +1,11 @@
 import * as Koa from "koa";
+import * as compose from "koa-compose";
 import {UserModel} from "../../../db/user";
 import {canSeeUser} from "./index";
+import RequirePermission from "../../middleware/require-permissions";
+import {AuthLevel} from "../../../auth/role";
 
-const GetUsers: Koa.Middleware = async ctx => {
+export const GetOneUser: Koa.Middleware = async ctx => {
     const {id} = ctx.params;
     if (!await canSeeUser(id, ctx)) {
         ctx.throw(404);
@@ -19,4 +22,10 @@ const GetUsers: Koa.Middleware = async ctx => {
     }
 };
 
-export default GetUsers;
+export const GetMultipleUsers: Koa.Middleware = compose([
+    RequirePermission(AuthLevel.Manager),
+    async ctx => {
+        ctx.status = 200;
+        return (await UserModel.find()).map(it => it.toCleanObject());
+    }
+]);
