@@ -1,5 +1,5 @@
 import {Role as Roles} from "../../auth/role";
-import {joi, Email, Password, Phone, Role} from "./common";
+import {joi, Email, Password, Phone, Role, ObjectId} from "./common";
 
 export const CreateUserRequestSchema = joi.object({
     first_name: joi.string().required(),
@@ -7,7 +7,8 @@ export const CreateUserRequestSchema = joi.object({
     email: Email().required(),
     phone: Phone().required(),
     password: Password().required(),
-    role: Role().default(Roles.User).optional()
+    role: Role().default(Roles.User).optional(),
+    avatar: ObjectId().optional(),
 }).required();
 
 export const UpdateUserRequestSchema = joi.object({
@@ -18,6 +19,7 @@ export const UpdateUserRequestSchema = joi.object({
     password: Password(),
     current_password: Password(),
     role: Role(),
+    avatar: ObjectId(),
 }).with("password", "current_password").required();
 
 export const ResetPasswordRequestSchema = joi.object({

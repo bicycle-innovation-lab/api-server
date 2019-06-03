@@ -6,6 +6,7 @@ import {compare, hash} from "../auth/hash";
 import {getRoleLevel, Role} from "../auth/role";
 import {Booking} from "./booking";
 import {cleanMongooseDocument} from "./utils";
+import {Image} from "./image";
 
 export class User extends Typegoose {
     @prop({required: true})
@@ -35,6 +36,9 @@ export class User extends Typegoose {
      */
     @prop({required: true, default: new Date(0)})
     tokensNotBefore!: Date;
+
+    @prop({required: false, ref: Image})
+    avatar!: Ref<Image>;
 
     @prop()
     get authLevel() {
@@ -68,9 +72,10 @@ export class User extends Typegoose {
                     email,
                     phone,
                     bookings,
-                    role
+                    role,
+                    avatar
                 } = ret;
-                return {firstName, lastName, email, phone, bookings, role};
+                return {firstName, lastName, email, phone, bookings, role, avatar};
             }
         }));
     }
