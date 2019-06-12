@@ -4,20 +4,32 @@ import RequirePermission from "../../middleware/require-permissions";
 import {AuthLevel} from "../../../auth/role";
 import {CreateBookingRequestSchema} from "../../schema/bookings";
 import {BookingModel} from "../../../db/booking";
+import {BikeModel} from "../../../db/bike";
+import {UserModel} from "../../../db/user";
 
 const PostBookings: Koa.Middleware = compose([
     RequirePermission(AuthLevel.User),
     async ctx => {
         const {startTime, endTime, bike, user} = await ctx.validateBody(CreateBookingRequestSchema);
+
+        // only managers can create bookings on behalf of another user
+        if (user) {
+            await ctx.testPermission(AuthLevel.Manager);
+
+            const count = await UserModel.count({id: user}).exec();
+            if (count <= 0) {
+                ctx.throw(422, `User with id "${user}" does not exist`);
+            }
+        }
+
+        const count = await BikeModel.count({id: bike}).exec();
+        if (count <= 0) {
+            ctx.throw(422, `Bike with id "${bike}" does not exist`);
+        }
+
         const booking = new BookingModel({startTime, endTime, bike, user});
-
-        // if !bike
-        // status = 422 + error besked = 
-
-
-        // if user exists then...
-        ctx.testPermission
         await booking.save();
+
         ctx.status = 201;
         return booking;
     }
