@@ -16,12 +16,14 @@ const PostBookings: Koa.Middleware = compose([
         if (user) {
             await ctx.testPermission(AuthLevel.Manager);
 
+            // check if the given user exists
             const count = await UserModel.count({id: user}).exec();
             if (count <= 0) {
                 ctx.throw(422, `User with id "${user}" does not exist`);
             }
         }
 
+        // check if the given bike exists
         const count = await BikeModel.count({id: bike}).exec();
         if (count <= 0) {
             ctx.throw(422, `Bike with id "${bike}" does not exist`);
@@ -31,7 +33,7 @@ const PostBookings: Koa.Middleware = compose([
         await booking.save();
 
         ctx.status = 201;
-        return booking;
+        return booking.toCleanObject();
     }
 ]);
 export default PostBookings;
