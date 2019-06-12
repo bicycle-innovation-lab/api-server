@@ -12,6 +12,10 @@ const PostBookings: Koa.Middleware = compose([
     async ctx => {
         const {startTime, endTime, bike, user} = await ctx.validateBody(CreateBookingRequestSchema);
 
+        if (endTime > startTime) {
+            return ctx.throw(422, "End time cannot be after start time");
+        }
+
         // only managers can create bookings on behalf of another user
         if (user) {
             await ctx.testPermission(AuthLevel.Manager);
@@ -19,14 +23,14 @@ const PostBookings: Koa.Middleware = compose([
             // check if the given user exists
             const count = await UserModel.count({id: user}).exec();
             if (count <= 0) {
-                ctx.throw(422, `User with id "${user}" does not exist`);
+                return ctx.throw(422, `User with id "${user}" does not exist`);
             }
         }
 
         // check if the given bike exists
         const count = await BikeModel.count({id: bike}).exec();
         if (count <= 0) {
-            ctx.throw(422, `Bike with id "${bike}" does not exist`);
+            return ctx.throw(422, `Bike with id "${bike}" does not exist`);
         }
 
         const booking = new BookingModel({startTime, endTime, bike, user});
