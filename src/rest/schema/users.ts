@@ -2,14 +2,17 @@ import {Role as Roles} from "../../auth/role";
 import {joi, Email, Password, Phone, Role, ObjectId} from "./common";
 
 export const CreateUserRequestSchema = joi.object({
-    first_name: joi.string().required(),
-    last_name: joi.string().required(),
+    firstName: joi.string().required(),
+    lastName: joi.string().required(),
     email: Email().required(),
     phone: Phone().required(),
     password: Password().required(),
     role: Role().default(Roles.User).optional(),
     avatar: ObjectId().optional(),
-}).required();
+})
+    .rename("first_name", "firstName")
+    .rename("last_name", "lastName")
+    .required();
 
 export const UpdateUserRequestSchema = joi.object({
     first_name: joi.string(),
