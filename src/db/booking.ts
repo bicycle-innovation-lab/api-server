@@ -19,7 +19,7 @@ export class Booking extends Typegoose {
 
     @instanceMethod
     toCleanObject(this: BookingDocument) {
-        cleanMongooseDocument(this.toObject());
+        return cleanMongooseDocument(this.toObject());
     }
 }
 export const BookingModel = new Booking().getModelForClass(Booking);
