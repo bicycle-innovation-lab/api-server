@@ -1,14 +1,16 @@
 import * as Koa from "koa";
-import {ImageModel} from "../../../db/image";
 import {ObjectId} from "../../schema/common";
 import {downloadFile} from "../../../db/file";
+import * as Logic from "../../../web/logic/images";
 
 export const GetImage: Koa.Middleware = async ctx => {
     const {id} = ctx.params;
     if (ObjectId().validate(id).error) {
         ctx.throw(404);
     }
-    const image = await ImageModel.findById(id);
+
+    const image = await Logic.getImage(ctx, id);
+
     if (!image) {
         ctx.throw(404);
     } else {
@@ -22,10 +24,12 @@ export const GetImageVariant: Koa.Middleware = async ctx => {
     if (ObjectId().validate(id).error) {
         ctx.throw(404);
     }
-    const image = await ImageModel.findById(id);
+
+    const image = await Logic.getImage(ctx, id);
     if (!image) {
         return ctx.throw(404);
     }
+
     const imageVariant = image.variants.find(it => it.type === variant);
     if (!imageVariant) {
         return ctx.throw(404);

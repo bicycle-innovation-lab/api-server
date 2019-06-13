@@ -1,21 +1,22 @@
 import * as Koa from "koa";
 import {AuthLevel, getRoleLevel} from "../../auth/role";
+import InsufficientPermissionError from "../../web/logic/insufficient-permission.error";
+import InvalidTokenError from "../../web/logic/invalid-token.error";
 
 export default function TestPermission(app: Koa) {
     app.context.testPermission = (async function(this: Koa.BaseContext, level: AuthLevel) {
         const user = await this.state.getUser();
         if (user) {
-            const userLevel = getRoleLevel(user.role);
+            const userLevel = user.authLevel;
             if (userLevel >= level) {
                 return true
             } else {
                 // user does not have high enough auth level
-                this.throw(403, "User has insufficient permissions");
+                throw new InsufficientPermissionError(level, userLevel);
             }
         } else {
             // no user is signed in
-            this.set("WWW-Authenticate", "Bearer");
-            this.throw(401, "No session authentication");
+            throw new InvalidTokenError("No session authentication");
         }
     });
 }

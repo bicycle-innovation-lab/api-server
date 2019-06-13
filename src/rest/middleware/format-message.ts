@@ -15,6 +15,11 @@ const FormatMessage: Koa.Middleware = async (ctx, next) => {
         if (status >= 500) {
             ctx.app.emit("error", err, ctx);
         }
+        if (err.headers) {
+            for (const key in Object.keys(err.headers)) {
+                ctx.set(key, err.headers[key]);
+            }
+        }
         const res = {
             code: status,
             error: err.expose === true ?
