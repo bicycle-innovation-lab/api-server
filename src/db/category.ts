@@ -2,7 +2,7 @@ import {arrayProp, instanceMethod, pre, prop, Ref, staticMethod, Typegoose} from
 import * as slug from "slug";
 import * as Mongoose from "mongoose";
 import {cleanMongooseDocument} from "./utils";
-import {ObjectId} from "../rest/schema/common";
+import {ObjectId} from "../web/schema/common";
 import {Image} from "./image";
 
 @pre("validate", function (this: Category, next) {

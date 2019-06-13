@@ -1,9 +1,9 @@
 import * as Koa from "koa";
 import * as compose from "koa-compose";
 import {UpdateCategoryRequestSchema} from "../../schema/categories";
-import * as Logic from "../../../web/logic/categories";
-import RequirePermission from "../../middleware/require-permissions";
-import {AuthLevel} from "../../../auth/role";
+import * as Logic from "../../../logic/categories";
+import RequirePermission from "../../../middleware/require-permissions";
+import {AuthLevel} from "../../../../auth/role";
 
 const PutCategories: Koa.Middleware = compose([
     RequirePermission(AuthLevel.Manager),

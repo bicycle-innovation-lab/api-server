@@ -1,9 +1,9 @@
 import * as Koa from "koa";
 import * as compose from "koa-compose";
-import RequirePermission from "../../middleware/require-permissions";
-import {AuthLevel} from "../../../auth/role";
+import RequirePermission from "../../../middleware/require-permissions";
+import {AuthLevel} from "../../../../auth/role";
 import {CreateBikeRequestSchema} from "../../schema/bikes";
-import * as Logic from "../../../web/logic/bikes";
+import * as Logic from "../../../logic/bikes";
 
 const PostBikes: Koa.Middleware = compose([
     RequirePermission(AuthLevel.Manager),

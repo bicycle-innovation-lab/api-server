@@ -1,7 +1,7 @@
 import * as Koa from "koa";
 import {AuthLevel, getRoleLevel} from "../../auth/role";
-import InsufficientPermissionError from "../../web/logic/insufficient-permission.error";
-import InvalidTokenError from "../../web/logic/invalid-token.error";
+import InsufficientPermissionError from "../logic/insufficient-permission.error";
+import InvalidTokenError from "../logic/invalid-token.error";
 
 export default function TestPermission(app: Koa) {
     app.context.testPermission = (async function(this: Koa.BaseContext, level: AuthLevel) {

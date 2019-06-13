@@ -1,7 +1,7 @@
 import * as Router from "koa-router";
-import {UserModel} from "../../db/user";
+import {UserModel} from "../../../db/user";
 import {ResetPasswordTokenRequestSchema, SessionTokenRequestSchema} from "../schema/tokens";
-import {issuePasswordResetToken} from "../../auth/token";
+import {issuePasswordResetToken} from "../../../auth/token";
 
 const TokensRouter = new Router();
 

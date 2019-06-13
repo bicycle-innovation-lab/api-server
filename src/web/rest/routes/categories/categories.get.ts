@@ -1,5 +1,5 @@
 import * as Koa from "koa";
-import * as Logic from "../../../web/logic/categories";
+import * as Logic from "../../../logic/categories";
 
 export const GetMultipleCategories: Koa.Middleware = async ctx => {
     const categories = await Logic.listCategories(ctx);

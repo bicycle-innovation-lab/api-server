@@ -1,8 +1,8 @@
 import * as Koa from "koa";
 import * as compose from "koa-compose";
-import * as Logic from "../../../web/logic/users";
-import RequirePermission from "../../middleware/require-permissions";
-import {AuthLevel} from "../../../auth/role";
+import * as Logic from "../../../logic/users";
+import RequirePermission from "../../../middleware/require-permissions";
+import {AuthLevel} from "../../../../auth/role";
 
 export const GetOneUser: Koa.Middleware = compose([
     RequirePermission(AuthLevel.User),

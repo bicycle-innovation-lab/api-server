@@ -3,7 +3,7 @@ import * as KoaJWT from "koa-jwt";
 import * as KoaBodyParser from "koa-body-parsers";
 import * as KoaCORS from "@koa/cors";
 import {Secret} from "../auth/token";
-import Routes from "./routes";
+import Routes from "./rest/routes";
 import PopulateUser from "./middleware/populate-user";
 import FormatResponse from "./middleware/format-message";
 import TestPermission from "./plugins/test-permissions";
