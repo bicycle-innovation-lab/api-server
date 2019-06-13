@@ -64,7 +64,7 @@ export class Image extends Typegoose {
     variants!: ImageVariant[];
 
     @staticMethod
-    static async createImage(name: string, title: string, alt: string, source: ReadStream, variants: ImageVariantType[]): Promise<ImageDocument | null> {
+    static async createImage(name: string, title: string, alt: string, source: ReadStream, variants: ImageVariantType[]): Promise<ImageDocument> {
         // convert source image to proper format
         const buf = await streamToBuffer(source);
         const original = await convert(buf);
