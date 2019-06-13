@@ -1,5 +1,5 @@
 import {Role as Roles} from "../../../auth/role";
-import {joi, Email, Password, Phone, Role, ObjectId} from "./common";
+import {joi, Email, Password, Phone, Role, ObjectId} from "../../schema/common";
 
 export const CreateUserRequestSchema = joi.object({
     firstName: joi.string().required(),

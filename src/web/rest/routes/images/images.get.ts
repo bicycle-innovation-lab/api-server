@@ -1,5 +1,5 @@
 import * as Koa from "koa";
-import {ObjectId} from "../../schema/common";
+import {ObjectId} from "../../../schema/common";
 import {downloadFile} from "../../../../db/file";
 import * as Logic from "../../../logic/images";
 

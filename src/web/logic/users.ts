@@ -1,7 +1,7 @@
 import * as Koa from "koa";
 import {UserDocument, UserModel} from "../../db/user";
 import {AuthLevel, getRoleLevel, Role} from "../../auth/role";
-import {ObjectId} from "../rest/schema/common";
+import {ObjectId} from "../schema/common";
 import InsufficientPermissionError from "./insufficient-permission.error";
 import IncorrectPasswordError from "./incorrect-password.error";
 

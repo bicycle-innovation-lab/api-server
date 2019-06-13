@@ -1,4 +1,4 @@
-import {joi, ObjectId} from "./common";
+import {joi, ObjectId} from "../../schema/common";
 
 export const CreateBikeRequestSchema = joi.object({
     title: joi.string().required(),

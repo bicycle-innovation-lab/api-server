@@ -1,4 +1,4 @@
-import {joi, Email, Password} from "./common";
+import {joi, Email, Password} from "../../schema/common";
 
 export const SessionTokenRequestSchema = joi.object({
     email: Email().required(),

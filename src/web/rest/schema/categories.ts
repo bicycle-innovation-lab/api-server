@@ -1,4 +1,4 @@
-import {joi} from "./common";
+import {joi} from "../../schema/common";
 
 export const CreateCategoryRequestSchema = joi.object({
     title: joi.string().required(),
