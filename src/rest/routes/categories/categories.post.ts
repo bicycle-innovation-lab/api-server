@@ -1,18 +1,13 @@
 import * as Koa from "koa";
-import * as compose from "koa-compose";
-import RequirePermission from "../../middleware/require-permissions";
-import {AuthLevel} from "../../../auth/role";
 import {CreateCategoryRequestSchema} from "../../schema/categories";
-import {CategoryModel} from "../../../db/category";
+import * as Logic from "../../../web/logic/categories";
 
-const PostCategories: Koa.Middleware = compose([
-    RequirePermission(AuthLevel.Manager),
-    async ctx => {
-        const {title, description} = await ctx.validateBody(CreateCategoryRequestSchema);
-        const category = new CategoryModel({title, description});
-        await category.save();
-        ctx.status = 201;
-        return category.toCleanObject();
-    }
-]);
+const PostCategories: Koa.Middleware = async ctx => {
+    const form = await ctx.validateBody(CreateCategoryRequestSchema);
+
+    const category = await Logic.createCategory(ctx, form);
+
+    ctx.status = 201;
+    return category.toCleanObject();
+};
 export default PostCategories;
