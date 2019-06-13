@@ -12,8 +12,8 @@ const PostBookings: Koa.Middleware = compose([
     async ctx => {
         const {startTime, endTime, bike, user} = await ctx.validateBody(CreateBookingRequestSchema);
 
-        if (endTime > startTime) {
-            return ctx.throw(422, "End time cannot be after start time");
+        if (endTime <= startTime) {
+            return ctx.throw(422, "End time must be after start time");
         }
 
         // only managers can create bookings on behalf of another user
