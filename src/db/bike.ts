@@ -1,9 +1,17 @@
-import {arrayProp, instanceMethod, prop, Ref, Typegoose} from "typegoose";
+import {arrayProp, instanceMethod, pre, prop, Ref, Typegoose} from "typegoose";
 import {ObjectID} from "mongodb";
 import * as Mongoose from "mongoose";
 import {Category} from "./category";
 import {Image} from "./image";
 
+@pre("validate", function(this: Bike, next) {
+// noinspection JSPotentiallyInvalidUsageOfClassThis
+    if (this.featuredImage < 0 || this.featuredImage >= this.images.length) {
+// noinspection JSPotentiallyInvalidUsageOfClassThis
+        this.featuredImage = 0
+    }
+    return next();
+})
 export class Bike extends Typegoose {
     @prop({required: true})
     title!: string;
@@ -13,6 +21,9 @@ export class Bike extends Typegoose {
 
     @arrayProp({itemsRef: Image})
     images!: Ref<Image>[];
+
+    @prop({required: true, default: 0})
+    featuredImage!: number;
 
     @prop({required: true})
     price!: number;
