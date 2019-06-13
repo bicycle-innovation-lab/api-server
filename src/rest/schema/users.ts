@@ -15,15 +15,19 @@ export const CreateUserRequestSchema = joi.object({
     .required();
 
 export const UpdateUserRequestSchema = joi.object({
-    first_name: joi.string(),
-    last_name: joi.string(),
+    firstName: joi.string(),
+    lastName: joi.string(),
     email: Email(),
     phone: Phone(),
     password: Password(),
-    current_password: Password(),
+    currentPassword: Password(),
     role: Role(),
     avatar: ObjectId(),
-}).with("password", "current_password").required();
+})
+    .rename("first_name", "firstName")
+    .rename("last_name", "lastName")
+    .rename("current_password", "currentPassword")
+    .with("password", "current_password").required();
 
 export const ResetPasswordRequestSchema = joi.object({
     password: Password().required()
