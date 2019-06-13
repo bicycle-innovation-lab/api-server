@@ -5,5 +5,8 @@ export const CreateBikeRequestSchema = joi.object({
     description: joi.string().required(),
     price: joi.number().required(),
     categories: joi.array().items(ObjectId()).default([]),
-    images: joi.array().items(ObjectId()).default([])
-}).required();
+    images: joi.array().items(ObjectId()).default([]),
+    featuredImage: joi.number().min(0).optional().default(0)
+})
+    .rename("featured_image", "featuredImage")
+    .required();

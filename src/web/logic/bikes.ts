@@ -16,6 +16,7 @@ export interface CreateBikeOptions {
     price: number;
     categories: string[];
     images: string[];
+    featuredImage?: number;
 }
 
 export async function createBike(ctx: Koa.Context, opts: CreateBikeOptions): Promise<BikeDocument> {
