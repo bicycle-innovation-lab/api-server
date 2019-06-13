@@ -1,8 +1,8 @@
 import * as Koa from "koa";
-import {TokenType} from "../../../auth/token";
+import {TokenType} from "../../../../auth/token";
 import {ResetPasswordRequestSchema, UpdateUserRequestSchema} from "../../schema/users";
-import * as Logic from "../../../web/logic/users";
-import {resetUserPassword} from "../../../web/logic/users";
+import * as Logic from "../../../logic/users";
+import {resetUserPassword} from "../../../logic/users";
 
 const PutUsers: Koa.Middleware = async ctx => {
     const {id} = ctx.params;

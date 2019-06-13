@@ -1,6 +1,6 @@
 import * as Koa from "koa";
 import {CreateUserRequestSchema} from "../../schema/users";
-import * as Logic from "../../../web/logic/users";
+import * as Logic from "../../../logic/users";
 
 const PostUsers: Koa.Middleware = async ctx => {
     const opts = await ctx.validateBody(CreateUserRequestSchema);

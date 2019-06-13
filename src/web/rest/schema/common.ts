@@ -1,6 +1,6 @@
 import * as Joi from "joi";
 import * as JoiPhoneNumber from "joi-phone-number";
-import {allRoles} from "../../auth/role";
+import {allRoles} from "../../../auth/role";
 
 export const joi: typeof Joi = Joi.extend(JoiPhoneNumber);
 

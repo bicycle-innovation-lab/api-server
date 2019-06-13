@@ -1,7 +1,7 @@
 import * as Koa from "koa";
 import {ObjectId} from "../../schema/common";
-import {downloadFile} from "../../../db/file";
-import * as Logic from "../../../web/logic/images";
+import {downloadFile} from "../../../../db/file";
+import * as Logic from "../../../logic/images";
 
 export const GetImage: Koa.Middleware = async ctx => {
     const {id} = ctx.params;

@@ -1,4 +1,4 @@
-import {Role as Roles} from "../../auth/role";
+import {Role as Roles} from "../../../auth/role";
 import {joi, Email, Password, Phone, Role, ObjectId} from "./common";
 
 export const CreateUserRequestSchema = joi.object({

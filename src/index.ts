@@ -1,5 +1,5 @@
 import Connect from "./db/connect";
-import {Server} from "./rest/server";
+import {Server} from "./web/server";
 
 (async () => {
     await Connect();

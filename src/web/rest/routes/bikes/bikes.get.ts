@@ -1,6 +1,6 @@
 import * as Koa from "koa";
 import {ObjectId} from "../../schema/common";
-import * as Logic from "../../../web/logic/bikes";
+import * as Logic from "../../../logic/bikes";
 
 export const GetMultipleBikes: Koa.Middleware = async ctx => {
     const bikes = await Logic.listBikes(ctx);

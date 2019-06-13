@@ -1,11 +1,11 @@
 import * as Koa from "koa";
 import * as compose from "koa-compose";
 import * as Busboy from "async-busboy";
-import {ImageVariantType} from "../../../db/image";
+import {ImageVariantType} from "../../../../db/image";
 import {CreateImageRequestSchema} from "../../schema/images";
-import * as Logic from "../../../web/logic/images";
-import RequirePermission from "../../middleware/require-permissions";
-import {AuthLevel} from "../../../auth/role";
+import * as Logic from "../../../logic/images";
+import RequirePermission from "../../../middleware/require-permissions";
+import {AuthLevel} from "../../../../auth/role";
 
 const PostImage: Koa.Middleware = compose([
     RequirePermission(AuthLevel.Manager),
