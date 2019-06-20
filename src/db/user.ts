@@ -67,6 +67,7 @@ export class User extends Typegoose {
             transform(doc, ret) {
                 // pick values that can be exposed to clients
                 const {
+                    _id,
                     firstName,
                     lastName,
                     email,
@@ -75,7 +76,7 @@ export class User extends Typegoose {
                     role,
                     avatar
                 } = ret;
-                return {firstName, lastName, email, phone, bookings, role, avatar};
+                return {_id, firstName, lastName, email, phone, bookings, role, avatar};
             }
         }));
     }
