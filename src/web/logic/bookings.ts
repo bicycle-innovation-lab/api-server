@@ -18,13 +18,31 @@ export async function getBooking(ctx: Koa.Context, id: string): Promise<BookingD
     return await BookingModel.findOne(filter) || undefined;
 }
 
-export async function listBookings(ctx: Koa.Context): Promise<BookingDocument[]> {
+export interface ListBookingsOptions {
+    filter?: {
+        bike?: string | string[];
+    }
+}
+
+export async function listBookings(ctx: Koa.Context, opts: ListBookingsOptions = {}): Promise<BookingDocument[]> {
     const filter: { [key: string]: any } = {};
 
     // only managers and up can see bookings made by other users
     const signedIn = await ctx.state.getUser();
     if (signedIn.authLevel < AuthLevel.Manager) {
         filter["user"] = signedIn._id;
+    }
+
+    if (opts.filter) {
+        if (opts.filter.bike) {
+            let f;
+            f = !Array.isArray(opts.filter.bike)
+                ? opts.filter.bike.length === 1
+                    ? opts.filter.bike[0]
+                    : {$in: opts.filter.bike}
+                : opts.filter.bike;
+            filter["bike"] = f;
+        }
     }
 
     return await BookingModel.find(filter);
