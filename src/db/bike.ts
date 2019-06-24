@@ -24,5 +24,11 @@ const bikeSchema = schema<Bike>({
     discount: prop(Number, [def(0)]),
     categories: [prop(ObjectId, [ref("Image")])]
 });
+bikeSchema.pre("save", function(this: BikeDocument, next) {
+    if (this.featuredImage < 0 || this.featuredImage >= this.images.length) {
+        this.featuredImage = 0
+    }
+    return next();
+});
 export type BikeDocument = Bike & Mongoose.Document;
 export const BikeModel = Mongoose.model<BikeDocument>("bike", bikeSchema);
