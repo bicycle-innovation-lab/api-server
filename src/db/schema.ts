@@ -34,7 +34,7 @@ interface StaticMethods<T> {
 }
 
 interface ModelOptions<T, STATICS extends StaticMethods<T>> {
-    statics: STATICS;
+    statics?: STATICS;
     pre?: {
         [key in 'validate' | 'save']?: HookSyncCallback<T & Document>;
     }
@@ -42,7 +42,7 @@ interface ModelOptions<T, STATICS extends StaticMethods<T>> {
 
 export function model<T, STATICS extends StaticMethods<T>>(name: string,
                                                            schema: Schema<T>,
-                                                           opts: ModelOptions<T, STATICS>): Model<T & Document> & STATICS {
+                                                           opts: ModelOptions<T, STATICS> = {}): Model<T & Document> & STATICS {
     if (opts.statics) {
         schema.static(opts.statics);
     }
