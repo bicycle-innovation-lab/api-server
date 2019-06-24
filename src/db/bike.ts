@@ -1,17 +1,18 @@
 import * as Mongoose from "mongoose";
-import {Image} from "./image";
-import {ObjectId, prop} from "./utils";
+import {Image, ImageDocument} from "./image";
+import {ObjectId, prop, Reference} from "./utils";
 import {def, ref, required} from "./modifiers";
 import {schema} from "./schema";
+import {CategoryDocument} from "./category";
 
 interface Bike {
     title: string;
     description: string;
-    images: ObjectId[],
+    images: Reference<ImageDocument>[],
     featuredImage: number;
     price: number;
     discount?: number;
-    categories: ObjectId[];
+    categories: Reference<CategoryDocument>[];
 }
 
 const bikeSchema = schema<Bike>({
