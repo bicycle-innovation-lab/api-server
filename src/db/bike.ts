@@ -2,7 +2,7 @@ import * as Mongoose from "mongoose";
 import {ImageDocument} from "./image";
 import {ObjectId, prop, Reference} from "./utils";
 import {def, ref, required} from "./modifiers";
-import {schema} from "./schema";
+import {model, schema} from "./schema";
 import {CategoryDocument} from "./category";
 
 interface Bike {
@@ -24,11 +24,18 @@ const bikeSchema = schema<Bike>({
     discount: prop(Number, [def(0)]),
     categories: [prop(ObjectId, [ref("image")])]
 });
-bikeSchema.pre("save", function(this: BikeDocument, next) {
-    if (this.featuredImage < 0 || this.featuredImage >= this.images.length) {
-        this.featuredImage = 0
-    }
-    return next();
-});
 export type BikeDocument = Bike & Mongoose.Document;
-export const BikeModel = Mongoose.model<BikeDocument>("bike", bikeSchema);
+
+export const BikeModel = model(
+    "bike",
+    bikeSchema,
+    {
+        pre: {
+            save(next) {
+                if (this.featuredImage < 0 || this.featuredImage >= this.images.length) {
+                    this.featuredImage = 0
+                }
+                return next();
+            }
+        }
+    });
