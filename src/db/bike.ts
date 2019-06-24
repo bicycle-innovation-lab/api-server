@@ -18,11 +18,11 @@ interface Bike {
 const bikeSchema = schema<Bike>({
     title: prop(String, [required]),
     description: prop(String, [required]),
-    images: [prop(ObjectId, [ref("Image")])],
+    images: [prop(ObjectId, [ref("image")])],
     featuredImage: prop(Number, [required, def(0)]),
     price: prop(Number, [required]),
     discount: prop(Number, [def(0)]),
-    categories: [prop(ObjectId, [ref("Image")])]
+    categories: [prop(ObjectId, [ref("image")])]
 });
 bikeSchema.pre("save", function(this: BikeDocument, next) {
     if (this.featuredImage < 0 || this.featuredImage >= this.images.length) {
