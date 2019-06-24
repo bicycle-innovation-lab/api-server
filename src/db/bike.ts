@@ -1,5 +1,5 @@
 import * as Mongoose from "mongoose";
-import {Image, ImageDocument} from "./image";
+import {ImageDocument} from "./image";
 import {ObjectId, prop, Reference} from "./utils";
 import {def, ref, required} from "./modifiers";
 import {schema} from "./schema";
