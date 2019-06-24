@@ -4,7 +4,7 @@ import * as Logic from "../../../logic/categories";
 export const GetMultipleCategories: Koa.Middleware = async ctx => {
     const categories = await Logic.listCategories(ctx);
     ctx.status = 200;
-    return categories.map(it => it.toCleanObject());
+    return categories;
 };
 export const GetOneCategory: Koa.Middleware = async ctx => {
     const {id} = ctx.params;

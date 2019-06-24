@@ -3,7 +3,7 @@ import {Category, CategoryDocument, CategoryModel} from "../../db/category";
 import {AuthLevel} from "../../auth/role";
 
 export async function getCategory(ctx: Koa.Context, id: string): Promise<CategoryDocument | undefined> {
-    return await Category.findBySlugOrId(id) || undefined;
+    return await CategoryModel.findBySlugOrId(id) || undefined;
 }
 
 export async function listCategories(ctx: Koa.Context): Promise<CategoryDocument[]> {
@@ -50,7 +50,7 @@ export interface UpdateCategoryOptions {
 export async function updateCategory(ctx: Koa.Context, opts: UpdateCategoryOptions): Promise<CategoryDocument | undefined> {
     await ctx.testPermission(AuthLevel.Manager);
 
-    const category = await Category.findBySlugOrId(opts.id);
+    const category = await CategoryModel.findBySlugOrId(opts.id);
     if (!category) {
         return undefined;
     }
