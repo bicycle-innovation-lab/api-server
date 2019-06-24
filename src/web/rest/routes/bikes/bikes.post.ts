@@ -13,7 +13,7 @@ const PostBikes: Koa.Middleware = compose([
         const bike = await Logic.createBike(ctx, form);
 
         ctx.status = 201;
-        return bike.toCleanObject();
+        return bike;
     }
 ]);
 export default PostBikes;

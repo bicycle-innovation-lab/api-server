@@ -7,7 +7,7 @@ export const GetMultipleBikes: Koa.Middleware = async ctx => {
     const bikes = await Logic.listBikes(ctx);
 
     ctx.status = 200;
-    return bikes.map(it => it.toCleanObject());
+    return bikes;
 };
 
 export const GetOneBike: Koa.Middleware = async ctx => {
@@ -22,7 +22,7 @@ export const GetOneBike: Koa.Middleware = async ctx => {
     }
 
     ctx.status = 200;
-    return bike.toCleanObject();
+    return bike;
 };
 
 export const GetBikeBookings: Koa.Middleware = async ctx => {

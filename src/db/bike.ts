@@ -1,50 +1,26 @@
-import {arrayProp, instanceMethod, pre, prop, Ref, Typegoose} from "typegoose";
-import {ObjectID} from "mongodb";
 import * as Mongoose from "mongoose";
-import {Category} from "./category";
 import {Image} from "./image";
+import {ObjectId, prop} from "./utils";
+import {def, ref, required} from "./modifiers";
+import {schema} from "./schema";
 
-@pre("validate", function(this: Bike, next) {
-// noinspection JSPotentiallyInvalidUsageOfClassThis
-    if (this.featuredImage < 0 || this.featuredImage >= this.images.length) {
-// noinspection JSPotentiallyInvalidUsageOfClassThis
-        this.featuredImage = 0
-    }
-    return next();
-})
-export class Bike extends Typegoose {
-    @prop({required: true})
-    title!: string;
-
-    @prop({required: true})
-    description!: string;
-
-    @arrayProp({itemsRef: Image})
-    images!: Ref<Image>[];
-
-    @prop({required: true, default: 0})
-    featuredImage!: number;
-
-    @prop({required: true})
-    price!: number;
-
-    @prop({default: 0})
-    discount!: number;
-
-    @arrayProp({required: true, itemsRef: Category})
-    categories!: Ref<Category>[];
-
-    @instanceMethod
-    toCleanObject(this: BikeDocument) {
-        return this.toObject({
-            transform(doc, ret) {
-                ret.id = new ObjectID(ret._id);
-                delete ret._id;
-                delete ret.__v;
-            }
-        });
-    }
+interface Bike {
+    title: string;
+    description: string;
+    images: typeof ObjectId[],
+    featuredImage: number;
+    price: number;
+    discount?: number;
+    categories: typeof ObjectId[];
 }
-
-export const BikeModel = new Bike().getModelForClass(Bike);
+const bikeSchema = schema<Bike>({
+    title: prop(String, [required]),
+    description: prop(String, [required]),
+    images: [prop(ObjectId, [ref("Image")])],
+    featuredImage: prop(Number, [required, def(0)]),
+    price: prop(Number, [required]),
+    discount: prop(Number, [def(0)]),
+    categories: [prop(ObjectId, [ref("Image")])]
+});
 export type BikeDocument = Bike & Mongoose.Document;
+export const BikeModel = Mongoose.model<BikeDocument>("bike", bikeSchema);

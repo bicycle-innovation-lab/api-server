@@ -1,8 +1,8 @@
 import * as Mongoose from "mongoose";
 import {instanceMethod, prop, Ref, Typegoose} from "typegoose";
-import {Bike} from "./bike";
 import {User} from "./user";
 import {cleanMongooseDocument} from "./utils";
+import {Schema} from "mongoose";
 
 export class Booking extends Typegoose {
     @prop({required: true})
@@ -11,8 +11,8 @@ export class Booking extends Typegoose {
     @prop({required: true})
     endTime!: Date;
 
-    @prop({ref: Bike})
-    bike!: Ref<Bike>;
+    @prop({required: true})
+    bike!: Mongoose.Types.ObjectId;
 
     @prop({ref: User})
     user!: Ref<User>;
