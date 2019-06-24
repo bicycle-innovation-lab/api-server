@@ -29,6 +29,8 @@ export function schema<T extends { [key: string]: any }>(
 
 type StaticMethod<T, R> = (this: Model<T & Document>, ...params: any) => R;
 
+type Operations = 'validate' | 'save';
+
 interface StaticMethods<T> {
     [key: string]: StaticMethod<T, any>
 }
@@ -36,7 +38,7 @@ interface StaticMethods<T> {
 interface ModelOptions<T, STATICS extends StaticMethods<T>> {
     statics?: STATICS;
     pre?: {
-        [key in 'validate' | 'save']?: HookSyncCallback<T & Document>;
+        [key in Operations]?: HookSyncCallback<T & Document>;
     }
 }
 
@@ -45,6 +47,11 @@ export function model<T, STATICS extends StaticMethods<T>>(name: string,
                                                            opts: ModelOptions<T, STATICS> = {}): Model<T & Document> & STATICS {
     if (opts.statics) {
         schema.static(opts.statics);
+    }
+    if (opts.pre) {
+        for (let op in opts.pre) {
+            schema.pre(op, opts.pre[op as Operations]!);
+        }
     }
     const model = mongooseModel<T & Document>(name, schema);
     return model as Model<T & Document> & STATICS;
