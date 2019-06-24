@@ -2,7 +2,7 @@ import * as Mongoose from "mongoose";
 import {ObjectId, prop, Reference} from "./utils";
 import {BikeDocument} from "./bike";
 import {UserDocument} from "./user";
-import {schema} from "./schema";
+import {model, schema} from "./schema";
 import {ref, required} from "./modifiers";
 
 export interface Booking {
@@ -19,4 +19,4 @@ const bookingSchema = schema<Booking>({
     user: prop(ObjectId, [required, ref("user")])
 });
 export type BookingDocument = Booking & Mongoose.Document;
-export const BookingModel = Mongoose.model<BookingDocument>("booking", bookingSchema);
+export const BookingModel = model("booking", bookingSchema);
