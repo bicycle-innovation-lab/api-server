@@ -3,6 +3,8 @@ import {Modifier} from "./utils";
 
 export const required: Modifier<any> = opts => ({...opts, required: true});
 
+export const unique: Modifier<any> = opts => ({...opts, unique: true});
+
 export const ref: (collection: string) => Modifier<typeof Schema.Types.ObjectId> =
     collection => opts => ({...opts, ref: collection});
 
