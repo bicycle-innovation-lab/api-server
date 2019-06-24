@@ -4,7 +4,6 @@ import * as IsEmail from "isemail";
 import {issueSessionToken} from "../auth/token";
 import {compare, hash} from "../auth/hash";
 import {getRoleLevel, Role} from "../auth/role";
-import {Booking} from "./booking";
 import {cleanMongooseDocument} from "./utils";
 import {Image} from "./image";
 
@@ -21,8 +20,8 @@ export class User extends Typegoose {
     @prop({required: true})
     phone!: string;
 
-    @arrayProp({itemsRef: Booking, default: []})
-    bookings!: Ref<Booking>[];
+    @arrayProp({default: [], items: Mongoose.Types.ObjectId})
+    bookings!: Mongoose.Types.ObjectId[];
 
     @prop({required: true})
     passwordHash!: string;

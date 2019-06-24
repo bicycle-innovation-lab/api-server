@@ -35,5 +35,5 @@ export const GetBikeBookings: Koa.Middleware = async ctx => {
 
     // TODO: Hide user id if logged in user is not manager or higher
     ctx.status = 200;
-    return bookings.map(it => it.toCleanObject());
+    return bookings;
 };

@@ -13,7 +13,7 @@ const PostBookings: Koa.Middleware = compose([
         const booking = await Logic.createBooking(ctx, form);
 
         ctx.status = 201;
-        return booking.toCleanObject();
+        return booking;
     }
 ]);
 export default PostBookings;
