@@ -14,7 +14,7 @@ export type Reference<T> = ObjectId | T;
 
 export type Modifier<T> = (opts: SchemaTypeOpts<T>) => SchemaTypeOpts<T>;
 
-export function prop<T>(type: T, modifiers: Modifier<T>[]): SchemaTypeOpts<T> {
+export function prop<T>(type: T, modifiers: Modifier<T>[] = []): SchemaTypeOpts<T> {
     const opts: SchemaTypeOpts<T> = {type};
     return modifiers.reduce((opts, it) => it(opts), opts);
 }
