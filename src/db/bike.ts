@@ -7,12 +7,13 @@ import {schema} from "./schema";
 interface Bike {
     title: string;
     description: string;
-    images: typeof ObjectId[],
+    images: ObjectId[],
     featuredImage: number;
     price: number;
     discount?: number;
-    categories: typeof ObjectId[];
+    categories: ObjectId[];
 }
+
 const bikeSchema = schema<Bike>({
     title: prop(String, [required]),
     description: prop(String, [required]),
