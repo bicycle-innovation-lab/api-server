@@ -15,7 +15,7 @@ export const GetImage: Koa.Middleware = async ctx => {
         ctx.throw(404);
     } else {
         ctx.status = 200;
-        return image.toCleanObject();
+        return image;
     }
 };
 

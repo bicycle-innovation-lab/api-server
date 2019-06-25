@@ -1,86 +1,78 @@
-import {arrayProp, instanceMethod, prop, Ref, Typegoose} from "typegoose";
 import * as Mongoose from "mongoose";
-import * as IsEmail from "isemail";
+import {cleanDocument, ObjectId, prop, Reference} from "./utils";
+import {BookingDocument} from "./booking";
+import {ImageDocument} from "./image";
+import {allRoles, AuthLevel, getRoleLevel, Role} from "../auth/role";
+import {model, schema} from "./schema";
+import {def, inEnum, ref, required, unique} from "./modifiers";
 import {issueSessionToken} from "../auth/token";
 import {compare, hash} from "../auth/hash";
-import {getRoleLevel, Role} from "../auth/role";
-import {Booking} from "./booking";
-import {cleanMongooseDocument} from "./utils";
-import {Image} from "./image";
 
-export class User extends Typegoose {
-    @prop({required: true})
-    firstName!: string;
-
-    @prop({required: true})
-    lastName!: string;
-
-    @prop({required: true, unique: true, validate: IsEmail.validate})
-    email!: string;
-
-    @prop({required: true})
-    phone!: string;
-
-    @arrayProp({itemsRef: Booking, default: []})
-    bookings!: Ref<Booking>[];
-
-    @prop({required: true})
-    passwordHash!: string;
-
-    @prop({required: true, enum: Role})
-    role!: Role;
-
+interface User {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    bookings: Reference<BookingDocument>[];
+    passwordHash: string;
+    role: Role;
     /**
      * Session tokens issued before this should not be considered valid. This value is updated, for example, when the
      * users password changes. This causes all session tokens issued with the old password to become invalid.
      */
-    @prop({required: true, default: new Date(0)})
-    tokensNotBefore!: Date;
+    tokensNotBefore: Date;
+    avatar: Reference<ImageDocument>;
 
-    @prop({required: false, ref: Image})
-    avatar!: Ref<Image>;
+    readonly authLevel: AuthLevel;
 
-    @prop()
-    get authLevel() {
-        return getRoleLevel(this.role);
-    }
+    issueToken(this: UserDocument): Promise<string>;
 
-    @instanceMethod
-    issueToken(this: UserDocument) {
-        return issueSessionToken(this.id);
-    }
+    comparePassword(this: UserDocument, password: string): Promise<boolean>;
 
-    @instanceMethod
-    comparePassword(password: string) {
-        return compare(this.passwordHash, password);
-    }
-
-    @instanceMethod
-    async setPassword(password: string) {
-        this.passwordHash = await hash(password);
-        this.tokensNotBefore = new Date(Date.now());
-    }
-
-    @instanceMethod
-    toCleanObject(this: UserDocument) {
-        return cleanMongooseDocument(this.toObject({
-            transform(doc, ret) {
-                // pick values that can be exposed to clients
-                const {
-                    _id,
-                    firstName,
-                    lastName,
-                    email,
-                    phone,
-                    bookings,
-                    role,
-                    avatar
-                } = ret;
-                return {_id, firstName, lastName, email, phone, bookings, role, avatar};
-            }
-        }));
-    }
+    setPassword(this: UserDocument, password: string): Promise<void>;
 }
 
-export const UserModel = new User().getModelForClass(User);
+const userSchema = schema<User>({
+    firstName: prop(String, [required]),
+    lastName: prop(String, [required]),
+    email: prop(String, [required, unique]),
+    phone: prop(String, [required]),
+    bookings: [prop(ObjectId, [ref("image")])],
+    passwordHash: prop(String, [required]),
+    role: prop(String, [required, inEnum(allRoles)]),
+    tokensNotBefore: prop(Date, [required, def(new Date(0))]),
+    avatar: prop(ObjectId, [ref("image")])
+}, {
+    toJSON: {
+        versionKey: false,
+        transform(doc, ret) {
+            const {passwordHash, tokensNotBefore, ...clean} = cleanDocument(ret);
+            return clean;
+        }
+    }
+});
 export type UserDocument = User & Mongoose.Document;
+
+export const UserModel = model(
+    "user",
+    userSchema,
+    {
+        instanceMethods: {
+            issueToken(): Promise<string> {
+                return issueSessionToken(this.id);
+            },
+            comparePassword(password: string): Promise<boolean> {
+                return compare(this.passwordHash, password);
+            },
+            async setPassword(password: string): Promise<void> {
+                this.passwordHash = await hash(password);
+                this.tokensNotBefore = new Date(Date.now());
+            }
+        },
+        virtuals: {
+            get authLevel(this: UserDocument): AuthLevel {
+                return getRoleLevel(this.role);
+            }
+        }
+    }
+);

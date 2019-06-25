@@ -1,26 +1,22 @@
 import * as Mongoose from "mongoose";
-import {instanceMethod, prop, Ref, Typegoose} from "typegoose";
-import {Bike} from "./bike";
-import {User} from "./user";
-import {cleanMongooseDocument} from "./utils";
+import {ObjectId, prop, Reference} from "./utils";
+import {BikeDocument} from "./bike";
+import {UserDocument} from "./user";
+import {model, schema} from "./schema";
+import {ref, required} from "./modifiers";
 
-export class Booking extends Typegoose {
-    @prop({required: true})
-    startTime!: Date;
-
-    @prop({required: true})
-    endTime!: Date;
-
-    @prop({ref: Bike})
-    bike!: Ref<Bike>;
-
-    @prop({ref: User})
-    user!: Ref<User>;
-
-    @instanceMethod
-    toCleanObject(this: BookingDocument) {
-        return cleanMongooseDocument(this.toObject());
-    }
+export interface Booking {
+    startTime: Date;
+    endTime: Date;
+    bike: Reference<BikeDocument>;
+    user: Reference<UserDocument>;
 }
-export const BookingModel = new Booking().getModelForClass(Booking);
+
+const bookingSchema = schema<Booking>({
+    startTime: prop(Date, [required]),
+    endTime: prop(Date, [required]),
+    bike: prop(ObjectId, [required, ref("bike")]),
+    user: prop(ObjectId, [required, ref("user")])
+});
 export type BookingDocument = Booking & Mongoose.Document;
+export const BookingModel = model("booking", bookingSchema);

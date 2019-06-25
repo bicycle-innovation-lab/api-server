@@ -15,7 +15,7 @@ export const GetOneBooking: Koa.Middleware = compose([
         }
 
         ctx.status = 200;
-        return booking.toCleanObject();
+        return booking;
     }]
 );
 
@@ -25,6 +25,6 @@ export const GetMultipleBookings: Koa.Middleware = compose([
         const bookings = await Logic.listBookings(ctx);
 
         ctx.status = 200;
-        return bookings.map(it => it.toCleanObject());
+        return bookings.map(it => it);
     }
 ]);

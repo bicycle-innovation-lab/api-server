@@ -13,6 +13,6 @@ const PostCategories: Koa.Middleware = compose([
         const category = await Logic.createCategory(ctx, form);
 
         ctx.status = 201;
-        return category.toCleanObject();
+        return category;
     }]);
 export default PostCategories;

@@ -18,6 +18,6 @@ const PutCategories: Koa.Middleware = compose([
         }
 
         ctx.status = 200;
-        return category.toCleanObject();
+        return category;
     }]);
 export default PutCategories;
