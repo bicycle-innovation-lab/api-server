@@ -29,7 +29,7 @@ type StaticMethod<T, R> = (this: Model<T & Document>, ...params: any) => R;
 
 type Operations = 'validate' | 'save';
 
-interface StaticMethods<T> {
+export interface StaticMethods<T> {
     [key: string]: StaticMethod<T, any>
 }
 

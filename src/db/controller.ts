@@ -4,7 +4,7 @@ type StaticMethod<T, R, STATICS> = (controller: Controller<T> & STATICS, ...para
 
 type Operations = 'validate' | 'save';
 
-interface StaticMethods<T> {
+export interface StaticMethods<T> {
     [key: string]: StaticMethod<T, any, this>
 }
 
