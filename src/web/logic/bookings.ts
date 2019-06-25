@@ -2,9 +2,9 @@ import * as Koa from "koa";
 import {BookingDocument, BookingModel} from "../../db/booking";
 import {AuthLevel, getRoleLevel} from "../../auth/role";
 import {UserModel} from "../../db/user";
-import {BikeModel} from "../../db/bike";
 import ValidationError from "./validation.error";
 import InvalidReferenceError from "./invalid-reference.error";
+import {BikeController} from "../../db/bike";
 
 export async function getBooking(ctx: Koa.Context, id: string): Promise<BookingDocument | undefined> {
     const filter: { [key: string]: any } = {_id: id};
@@ -74,7 +74,7 @@ export async function createBooking(ctx: Koa.Context, opts: CreateBookingOptions
     }
 
     // check if the given bike exists
-    const count = await BikeModel.count({_id: opts.bike}).exec();
+    const count = await BikeController.count({id: opts.bike});
     if (count <= 0) {
         throw new InvalidReferenceError(`Bike with id "${opts.bike}" does not exist`);
     }

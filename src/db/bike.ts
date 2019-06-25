@@ -2,8 +2,9 @@ import * as Mongoose from "mongoose";
 import {ImageDocument} from "./image";
 import {ObjectId, prop, Reference} from "./utils";
 import {def, ref, required} from "./modifiers";
-import {model, schema} from "./schema";
+import {schema} from "./schema";
 import {CategoryDocument} from "./category";
+import Controller from "./controller";
 
 interface Bike {
     title: string;
@@ -26,7 +27,7 @@ const bikeSchema = schema<Bike>({
 });
 export type BikeDocument = Bike & Mongoose.Document;
 
-export const BikeModel = model(
+export const BikeController = Controller(
     "bike",
     bikeSchema,
     {
