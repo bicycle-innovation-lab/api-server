@@ -24,7 +24,7 @@ function assert(token: Token | undefined, type: string | string[]) {
     }
 }
 
-export function parseQuery(query: string): any {
+function makeLexer(query: string): LexerWrapper {
     const lexer = moo.compile({
         beginArray: /\[/,
         endArray: /]/,
@@ -34,9 +34,11 @@ export function parseQuery(query: string): any {
 
         numberValue: /[\d.]+/,
         // remove quotes from value and escape quotes
-        stringValue: {match: /"(?:[^"\\]|\\.)*?"/, value: it => it
-                    .substr(1, it.length - 2)
-                    .replace(/\\"/g, '"')},
+        stringValue: {
+            match: /"(?:[^"\\]|\\.)*?"/, value: it => it
+                .substr(1, it.length - 2)
+                .replace(/\\"/g, '"')
+        },
         booleanValue: /true|false/,
 
         separator: /,/,
@@ -45,21 +47,37 @@ export function parseQuery(query: string): any {
         identifier: /[^\d\W]\w+/,
     });
     lexer.reset(query);
-    const wrapped = new LexerWrapper(lexer);
-    return parseNextValue(wrapped);
+    return new LexerWrapper(lexer);
+}
+
+export function parseQuery(query: string): any {
+    const lexer = makeLexer(query);
+    return parseNextValue(lexer);
+}
+
+export function parseInlineQuery(query: string): any {
+    const lexer = makeLexer(query);
+    return populateNextObject(lexer);
 }
 
 function parseNextObject(lexer: LexerWrapper): Dict {
-    let result: { [key: string]: any } = {};
+    let result = populateNextObject(lexer);
+    assert(lexer.next(), "endObject");
+    return result;
+}
 
-    while (!expect(lexer.peek(), "endObject")) {
+/** Reads the next object until 'endObject' or end of string. */
+function populateNextObject(lexer: LexerWrapper): Dict {
+    let result: { [key: string]: any } = {};
+    while (lexer.peek() && !expect(lexer.peek(), "endObject")) {
         parseNextKeyValuePair(lexer, result);
 
         if (expect(lexer.peek(), "separator")) {
             lexer.next();
         } else {
-            assert(lexer.next(), "endObject");
-            break;
+            if (lexer.peek()) {
+                assert(lexer.peek(), "endObject");
+            }
         }
     }
     return result;

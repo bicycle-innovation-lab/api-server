@@ -31,6 +31,13 @@ describe("query-string", () => {
         });
     });
 
+    describe("parseInlineQuery", () => {
+        it("should parse without begin and end object", () => {
+            QueryString.parseInlineQuery('first="value",second=20,bool=true')
+                .should.deep.eq({first: "value", second: 20, bool: true});
+        });
+    });
+
     describe("serializeQuery", () => {
         it("should serialize simple key value pairs", () => {
             QueryString.serializeQuery({first: "value", second: 20, bool: true})
