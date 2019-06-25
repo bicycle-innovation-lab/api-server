@@ -38,10 +38,19 @@ const userSchema = schema<User>({
     email: prop(String, [required, unique]),
     phone: prop(String, [required]),
     bookings: [prop(ObjectId, [ref("image")])],
-    passwordHash: [prop(String, [required])],
-    role: [prop(String, [required, inEnum(allRoles)])],
-    tokensNotBefore: [prop(Date, [required, def(new Date(0))])],
-    avatar: [prop(ObjectId, [ref("image")])]
+    passwordHash: prop(String, [required]),
+    role: prop(String, [required, inEnum(allRoles)]),
+    tokensNotBefore: prop(Date, [required, def(new Date(0))]),
+    avatar: prop(ObjectId, [ref("image")])
+}, {
+    toJSON: {
+        versionKey: false,
+        transform(doc, ret) {
+            const {__v, _id, passwordHash, tokensNotBefore, ...clean} = ret;
+            clean.id = _id;
+            return clean;
+        }
+    }
 });
 export type UserDocument = User & Mongoose.Document;
 
