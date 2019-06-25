@@ -1,6 +1,7 @@
 import {Schema, SchemaTypeOpts} from "mongoose";
 
-export function cleanMongooseDocument(doc: any) {
+export function cleanDocument(doc: any) {
+    // drop __v and rename _id to id
     const {__v, _id, ...clean} = doc;
     clean.id = _id;
     return clean;

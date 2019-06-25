@@ -1,5 +1,5 @@
 import * as Mongoose from "mongoose";
-import {ObjectId, prop, Reference} from "./utils";
+import {cleanDocument, ObjectId, prop, Reference} from "./utils";
 import {BookingDocument} from "./booking";
 import {ImageDocument} from "./image";
 import {allRoles, AuthLevel, getRoleLevel, Role} from "../auth/role";
@@ -46,8 +46,7 @@ const userSchema = schema<User>({
     toJSON: {
         versionKey: false,
         transform(doc, ret) {
-            const {__v, _id, passwordHash, tokensNotBefore, ...clean} = ret;
-            clean.id = _id;
+            const {passwordHash, tokensNotBefore, ...clean} = cleanDocument(ret);
             return clean;
         }
     }

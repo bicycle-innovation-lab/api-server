@@ -8,6 +8,7 @@ import {
     SchemaType,
     SchemaTypeOpts
 } from "mongoose";
+import {cleanDocument} from "./utils";
 
 export function schema<T extends { [key: string]: any }>(
     definition: { [key in keyof T]?: SchemaTypeOpts<any> | Schema | SchemaType },
@@ -16,11 +17,8 @@ export function schema<T extends { [key: string]: any }>(
     if (!options.toJSON) {
         options.toJSON = {
             versionKey: false,
-            transform(doc, ret, opts) {
-                // drop __v and rename _id to id
-                const {__v, _id, ...clean} = ret;
-                clean.id = _id;
-                return clean;
+            transform(doc, ret) {
+                return cleanDocument(ret);
             }
         }
     }
@@ -28,7 +26,6 @@ export function schema<T extends { [key: string]: any }>(
 }
 
 type StaticMethod<T, R> = (this: Model<T & Document>, ...params: any) => R;
-type InstanceMethod<T, R> = (this: T & Document, ...params: any) => R;
 
 type Operations = 'validate' | 'save';
 
