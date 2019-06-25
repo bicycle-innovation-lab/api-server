@@ -35,6 +35,6 @@ const PostImage: Koa.Middleware = compose([
         });
 
         ctx.status = 201;
-        return image.toCleanObject();
+        return image;
     }]);
 export default PostImage;

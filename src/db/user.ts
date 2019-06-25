@@ -5,7 +5,6 @@ import {issueSessionToken} from "../auth/token";
 import {compare, hash} from "../auth/hash";
 import {getRoleLevel, Role} from "../auth/role";
 import {cleanMongooseDocument} from "./utils";
-import {Image} from "./image";
 
 export class User extends Typegoose {
     @prop({required: true})
@@ -36,8 +35,8 @@ export class User extends Typegoose {
     @prop({required: true, default: new Date(0)})
     tokensNotBefore!: Date;
 
-    @prop({required: false, ref: Image})
-    avatar!: Ref<Image>;
+    @prop({required: false})
+    avatar!: Mongoose.Types.ObjectId;
 
     @prop()
     get authLevel() {

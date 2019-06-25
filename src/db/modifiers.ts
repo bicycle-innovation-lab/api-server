@@ -10,3 +10,6 @@ export const ref: (collection: string) => Modifier<typeof Schema.Types.ObjectId>
 
 export const def: (v: any) => Modifier<any> =
     v => opts => ({...opts, default: v});
+
+export const inEnum: (values: string[]) => Modifier<typeof String> =
+    values => opts => ({...opts, enum: values});
