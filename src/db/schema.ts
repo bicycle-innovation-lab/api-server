@@ -3,14 +3,14 @@ import {
     HookSyncCallback,
     model as mongooseModel,
     Model,
-    Schema,
+    Schema, SchemaDefinition,
     SchemaOptions,
     SchemaType,
     SchemaTypeOpts
 } from "mongoose";
 
 export function schema<T extends { [key: string]: any }>(
-    definition: { [key in keyof T]: SchemaTypeOpts<any> | Schema | SchemaType },
+    definition: { [key in keyof T]?: SchemaTypeOpts<any> | Schema | SchemaType },
     options: SchemaOptions = {}
 ): Schema<T> {
     if (!options.toJSON) {
@@ -24,10 +24,11 @@ export function schema<T extends { [key: string]: any }>(
             }
         }
     }
-    return new Schema(definition, options);
+    return new Schema(definition as SchemaDefinition, options);
 }
 
 type StaticMethod<T, R> = (this: Model<T & Document>, ...params: any) => R;
+type InstanceMethod<T, R> = (this: T & Document, ...params: any) => R;
 
 type Operations = 'validate' | 'save';
 
@@ -36,7 +37,13 @@ interface StaticMethods<T> {
 }
 
 interface ModelOptions<T, STATICS extends StaticMethods<T>> {
-    statics?: STATICS;
+    staticMethods?: STATICS;
+    instanceMethods?: {
+        [key in keyof T]?: T[key];
+    };
+    virtuals?: {
+        [key in keyof T]?: T[key];
+    };
     pre?: {
         [key in Operations]?: HookSyncCallback<T & Document>;
     }
@@ -45,8 +52,24 @@ interface ModelOptions<T, STATICS extends StaticMethods<T>> {
 export function model<T, STATICS extends StaticMethods<T>>(name: string,
                                                            schema: Schema<T>,
                                                            opts: ModelOptions<T, STATICS> = {}): Model<T & Document> & STATICS {
-    if (opts.statics) {
-        schema.static(opts.statics);
+    if (opts.staticMethods) {
+        schema.static(opts.staticMethods);
+    }
+    if (opts.instanceMethods) {
+        schema.method(opts.instanceMethods as any);
+    }
+    if (opts.virtuals) {
+        const descriptors = Object.getOwnPropertyDescriptors(opts.virtuals);
+        for (let name of Object.getOwnPropertyNames(opts.virtuals)) {
+            const descriptor = descriptors[name];
+            let v = schema.virtual(name);
+            if (descriptor.get) {
+                v = v.get(descriptor.get);
+            }
+            if (descriptor.set) {
+                v = v.set(descriptor.set);
+            }
+        }
     }
     if (opts.pre) {
         for (let op in opts.pre) {

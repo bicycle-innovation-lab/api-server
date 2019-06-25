@@ -25,7 +25,7 @@ const PutUsers: Koa.Middleware = async ctx => {
             return ctx.throw(404);
         }
         ctx.status = 200;
-        return user.toCleanObject();
+        return user;
     }
 };
 

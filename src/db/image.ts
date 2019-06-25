@@ -69,7 +69,7 @@ export const ImageModel = model(
     "image",
     imageSchema,
     {
-        statics: {
+        staticMethods: {
             async createImage(name: string, title: string, alt: string, source: ReadStream, variants: ImageVariantType[]): Promise<ImageDocument> {
                 // convert source image to proper format
                 const buf = await streamToBuffer(source);

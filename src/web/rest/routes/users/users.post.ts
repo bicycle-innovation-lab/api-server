@@ -6,7 +6,7 @@ const PostUsers: Koa.Middleware = async ctx => {
     const opts = await ctx.validateBody(CreateUserRequestSchema);
     const user = await Logic.createUser(ctx, opts);
     ctx.status = 201;
-    return user.toCleanObject();
+    return user;
 };
 
 export default PostUsers

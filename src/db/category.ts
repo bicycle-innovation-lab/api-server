@@ -31,7 +31,7 @@ export const CategoryModel = model(
                 return next();
             }
         },
-        statics: {
+        staticMethods: {
             findBySlugOrId(id: string): Promise<CategoryDocument | null> {
                 if (ObjectIdSchema().validate(id).error) {
                     return this.findOne({slug: id}).exec();

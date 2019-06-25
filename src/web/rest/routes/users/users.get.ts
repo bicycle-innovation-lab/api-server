@@ -15,7 +15,7 @@ export const GetOneUser: Koa.Middleware = compose([
             return ctx.throw(404);
         } else {
             ctx.status = 200;
-            return user.toCleanObject();
+            return user;
         }
     }]);
 
@@ -24,5 +24,5 @@ export const GetMultipleUsers: Koa.Middleware = compose([
     async ctx => {
         const users = await Logic.listUsers(ctx);
         ctx.status = 200;
-        return users.map(it => it.toCleanObject());
+        return users;
     }]);
