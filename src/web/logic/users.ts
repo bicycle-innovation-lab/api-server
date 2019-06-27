@@ -1,9 +1,10 @@
 import * as Koa from "koa";
-import {UserController, UserDocument} from "../../db/user";
+import {User, UserController, UserDocument} from "../../db/user";
 import {AuthLevel, getRoleLevel, Role} from "../../auth/role";
 import {ObjectId} from "../schema/common";
 import InsufficientPermissionError from "./insufficient-permission.error";
 import IncorrectPasswordError from "./incorrect-password.error";
+import {Filter} from "../../db/controller/filter";
 
 /**
  * Tests if the currently signed in user can see the given user id. Returns true if the signed in user is manager or
@@ -35,7 +36,11 @@ export async function getUser(ctx: Koa.Context, id: string): Promise<UserDocumen
         : await UserController.find(id);
 }
 
-export async function listUsers(ctx: Koa.Context): Promise<UserDocument[]> {
+interface ListUsersOptions {
+    filter?: Filter<User>;
+}
+
+export async function listUsers(ctx: Koa.Context, opts: ListUsersOptions = {}): Promise<UserDocument[]> {
     const user = await ctx.state.getUser();
     if (!user) {
         return [];
@@ -43,7 +48,7 @@ export async function listUsers(ctx: Koa.Context): Promise<UserDocument[]> {
     if (getRoleLevel(user.role) < AuthLevel.Manager) {
         return [user];
     } else {
-        return await UserController.list();
+        return await UserController.list(opts.filter);
     }
 }
 
