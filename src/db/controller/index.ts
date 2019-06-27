@@ -26,7 +26,7 @@ export interface SlimDocument {
     id?: string;
 }
 
-export interface Controller<T> {
+export default interface Controller<T> {
     readonly model: Model<T & Document>;
 
     list(filter?: ObjectFilter<T & SlimDocument>): Promise<(T & Document)[]>;

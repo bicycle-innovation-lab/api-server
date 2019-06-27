@@ -5,8 +5,9 @@ import {ReadStream} from "fs";
 import resize, {convert} from "../images/resize";
 import {bufferToStream, streamToBuffer} from "../images/buffers";
 import {uploadFile} from "./file";
-import {model, schema} from "./schema";
+import {schema} from "./schema";
 import {inEnum, required} from "./modifiers";
+import Controller, {SlimDocument} from "./controller";
 
 export enum ImageVariantType {
     Original = "original",
@@ -46,7 +47,7 @@ interface ImageVariant {
     fileId: ObjectID;
 }
 
-export interface Image {
+export interface Image extends SlimDocument {
     fileName: string;
     title: string;
     alt: string;
@@ -65,7 +66,7 @@ const imageSchema = schema<Image>({
     }]
 });
 export type ImageDocument = Image & Mongoose.Document;
-export const ImageModel = model(
+export const ImageController = Controller(
     "image",
     imageSchema,
     {
@@ -101,13 +102,12 @@ export const ImageModel = model(
                     };
                     resizedVariants.push(img);
                 }
-
-                return new ImageModel({
+                return this.newDocument({
                     fileName: name,
                     title,
                     alt,
                     variants: resizedVariants
-                })
+                });
             }
         }
     });
