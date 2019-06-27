@@ -1,7 +1,7 @@
 import {Document, HookSyncCallback, model as mongooseModel, Model, Schema} from "mongoose";
 import {convertFilterToMongoDB, Filter, ObjectFilter} from "./filter";
 
-type StaticMethod<T, R, STATICS> = (controller: Index<T> & STATICS, ...params: any) => R;
+type StaticMethod<T, R, STATICS> = (controller: Controller<T> & STATICS, ...params: any) => R;
 
 type Operations = 'validate' | 'save';
 
@@ -26,7 +26,7 @@ export interface SlimDocument {
     id?: string;
 }
 
-export interface Index<T> {
+export interface Controller<T> {
     readonly model: Model<T & Document>;
 
     list(filter?: ObjectFilter<T & SlimDocument>): Promise<(T & Document)[]>;
@@ -40,7 +40,7 @@ export interface Index<T> {
 
 export default function Controller<T, STATICS extends StaticMethods<T>>(name: string,
                                                                         schema: Schema<T>,
-                                                                        opts: ControllerOptions<T, STATICS> = {}): Index<T> & STATICS {
+                                                                        opts: ControllerOptions<T, STATICS> = {}): Controller<T> & STATICS {
     if (opts.staticMethods) {
         schema.static(opts.staticMethods);
     }
@@ -68,7 +68,7 @@ export default function Controller<T, STATICS extends StaticMethods<T>>(name: st
 
     const model = mongooseModel<T & Document>(name, schema);
 
-    const self: Index<T> = {
+    const self: Controller<T> = {
         model,
         list(filter = {}) {
             return model.find(convertFilterToMongoDB(filter)).exec();
