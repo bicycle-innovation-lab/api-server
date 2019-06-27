@@ -1,62 +1,49 @@
 import * as Koa from "koa";
-import {BookingDocument, BookingModel} from "../../db/booking";
+import {Booking, BookingController, BookingDocument} from "../../db/booking";
 import {AuthLevel, getRoleLevel} from "../../auth/role";
 import {UserModel} from "../../db/user";
 import ValidationError from "./validation.error";
 import InvalidReferenceError from "./invalid-reference.error";
 import {BikeController} from "../../db/bike";
+import {Filter} from "../../db/controller/filter";
 
 export async function getBooking(ctx: Koa.Context, id: string): Promise<BookingDocument | undefined> {
-    const filter: { [key: string]: any } = {_id: id};
+    const filter: Filter<Booking> = {};
 
     // only managers and up can see bookings made by other users
     const signedIn = await ctx.state.getUser();
     if (getRoleLevel(signedIn.role) < AuthLevel.Manager) {
-        filter["user"] = signedIn._id;
+        filter.user = signedIn.id;
     }
 
-    return await BookingModel.findOne(filter) || undefined;
+    return await BookingController.find(id, filter) || undefined;
 }
 
 export interface ListBookingsOptions {
-    filter?: {
-        bike?: string | string[];
-    }
+    filter?: Filter<Booking>
 }
 
 export async function listBookings(ctx: Koa.Context, opts: ListBookingsOptions = {}): Promise<BookingDocument[]> {
-    const filter: { [key: string]: any } = {};
+    const filter: Filter<Booking> = Object.assign({}, opts.filter);
 
     // only managers and up can see bookings made by other users
     const signedIn = await ctx.state.getUser();
     if (signedIn.authLevel < AuthLevel.Manager) {
-        filter["user"] = signedIn._id;
+        filter.user = signedIn.id;
     }
 
-    if (opts.filter) {
-        if (opts.filter.bike) {
-            let f;
-            f = !Array.isArray(opts.filter.bike)
-                ? opts.filter.bike.length === 1
-                    ? opts.filter.bike[0]
-                    : {$in: opts.filter.bike}
-                : opts.filter.bike;
-            filter["bike"] = f;
-        }
-    }
-
-    return await BookingModel.find(filter);
+    return await BookingController.list(filter);
 }
 
 export interface CreateBookingOptions {
     startTime: Date;
     endTime: Date;
     bike: string;
-    user: string;
+    user?: string;
 }
 
 export async function createBooking(ctx: Koa.Context, opts: CreateBookingOptions): Promise<BookingDocument> {
-    ctx.testPermission(AuthLevel.User);
+    await ctx.testPermission(AuthLevel.User);
 
     if (opts.endTime <= opts.startTime) {
         throw new ValidationError("End time must be after start time");
@@ -71,6 +58,8 @@ export async function createBooking(ctx: Koa.Context, opts: CreateBookingOptions
         if (count <= 0) {
             throw new InvalidReferenceError(`User with id "${opts.user}" does not exist`);
         }
+    } else {
+        opts.user = (await ctx.state.getUser()).id;
     }
 
     // check if the given bike exists
@@ -79,7 +68,7 @@ export async function createBooking(ctx: Koa.Context, opts: CreateBookingOptions
         throw new InvalidReferenceError(`Bike with id "${opts.bike}" does not exist`);
     }
 
-    const booking = new BookingModel(opts);
+    const booking = BookingController.newDocument(opts);
     await booking.save();
 
     return booking;

@@ -24,3 +24,11 @@ export const numberFilter = () => joi.alt().try(
         gt: joi.when("gte", {is: joi.exist(), then: joi.forbidden(), otherwise: joi.number()})
     })
 );
+export const dateFilter = () => joi.alt().try(
+    joi.object({
+        lte: joi.number(),
+        lt: joi.when("lte", {is: joi.exist(), then: joi.forbidden(), otherwise: joi.date()}),
+        gte: joi.number(),
+        gt: joi.when("gte", {is: joi.exist(), then: joi.forbidden(), otherwise: joi.date()})
+    })
+);

@@ -33,7 +33,7 @@ export interface Index<T> {
 
     count(filter?: ObjectFilter<T & SlimDocument>): Promise<number>;
 
-    find(id: string): Promise<T & Document | nil>;
+    find(id: string, filter?: ObjectFilter<T & SlimDocument>): Promise<T & Document | nil>;
 
     newDocument(doc: { [key in keyof T]?: T[key] }): T & Document;
 }
@@ -74,7 +74,7 @@ export default function Controller<T, STATICS extends StaticMethods<T>>(name: st
             return model.find(convertFilterToMongoDB(filter)).exec();
         },
         count(filter = {}) {
-            return model.count(filter).exec();
+            return model.count(convertFilterToMongoDB(filter)).exec();
         },
         find(id) {
             return model.findById(id).exec();
