@@ -2,12 +2,12 @@ export type ObjectFilter<T> = { [key in keyof T]?: Filter<T[key]> };
 
 type SingleOrArray<T> = T | T[];
 
-export interface NumberFilter {
+export type NumberFilter = SingleOrArray<number> | {
     lte?: number;
     lt?: number;
     gte?: number;
     gt?: number;
-}
+};
 
 export interface DateFilter {
     lte?: Date;
@@ -38,6 +38,7 @@ export function convertFilterToMongoDB(filter: ObjectFilter<any>) {
             return {[key]: {$in: filter}};
         }
         switch (typeof filter) {
+            case "number":
             case "string":
                 return {[key]: {$eq: filter}};
             case "object": {
