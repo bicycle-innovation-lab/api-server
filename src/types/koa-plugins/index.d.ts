@@ -2,6 +2,11 @@ import * as Joi from "joi";
 import {AuthLevel} from "../../auth/role";
 import {UserDocument} from "../../db/user";
 import {TokenType} from "../../auth/token";
+import {BikeController} from "../../db/bike";
+import {BookingController} from "../../db/booking";
+import {CategoryController} from "../../db/category";
+import {ImageController} from "../../db/image";
+import {UserController} from "../../db/user";
 
 declare module "koa" {
     interface BaseContext {
@@ -23,6 +28,14 @@ declare module "koa" {
             authenticated: boolean;
             /** Whether the current authentication is a user session. */
             session: boolean;
+
+            db: {
+                bikes: typeof BikeController;
+                bookings: typeof BookingController;
+                categories: typeof CategoryController;
+                images: typeof ImageController;
+                users: typeof UserController;
+            }
         }
     }
 }

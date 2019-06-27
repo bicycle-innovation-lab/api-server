@@ -1,10 +1,8 @@
 import * as Koa from "koa";
-import {Booking, BookingController, BookingDocument} from "../../db/booking";
+import {Booking, BookingDocument} from "../../db/booking";
 import {AuthLevel, getRoleLevel} from "../../auth/role";
-import {UserController} from "../../db/user";
 import ValidationError from "./validation.error";
 import InvalidReferenceError from "./invalid-reference.error";
-import {BikeController} from "../../db/bike";
 import {Filter} from "../../db/controller/filter";
 
 export async function getBooking(ctx: Koa.Context, id: string): Promise<BookingDocument | undefined> {
@@ -16,7 +14,7 @@ export async function getBooking(ctx: Koa.Context, id: string): Promise<BookingD
         filter = {id, user: signedIn.id};
     }
 
-    return await BookingController.find(filter) || undefined;
+    return await ctx.state.db.bookings.find(filter) || undefined;
 }
 
 export interface ListBookingsOptions {
@@ -32,7 +30,7 @@ export async function listBookings(ctx: Koa.Context, opts: ListBookingsOptions =
         filter.user = signedIn.id;
     }
 
-    return await BookingController.list(filter);
+    return await ctx.state.db.bookings.list(filter);
 }
 
 export interface CreateBookingOptions {
@@ -54,7 +52,7 @@ export async function createBooking(ctx: Koa.Context, opts: CreateBookingOptions
         await ctx.testPermission(AuthLevel.Manager);
 
         // check if the given user exists
-        const count = await UserController.count({id: opts.user});
+        const count = await ctx.state.db.users.count({id: opts.user});
         if (count <= 0) {
             throw new InvalidReferenceError(`User with id "${opts.user}" does not exist`);
         }
@@ -63,12 +61,12 @@ export async function createBooking(ctx: Koa.Context, opts: CreateBookingOptions
     }
 
     // check if the given bike exists
-    const count = await BikeController.count({id: opts.bike});
+    const count = await ctx.state.db.bikes.count({id: opts.bike});
     if (count <= 0) {
         throw new InvalidReferenceError(`Bike with id "${opts.bike}" does not exist`);
     }
 
-    const booking = BookingController.newDocument(opts);
+    const booking = ctx.state.db.bookings.newDocument(opts);
     await booking.save();
 
     return booking;

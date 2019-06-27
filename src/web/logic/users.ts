@@ -1,5 +1,5 @@
 import * as Koa from "koa";
-import {User, UserController, UserDocument} from "../../db/user";
+import {User, UserDocument} from "../../db/user";
 import {AuthLevel, getRoleLevel, Role} from "../../auth/role";
 import {ObjectId} from "../schema/common";
 import InsufficientPermissionError from "./insufficient-permission.error";
@@ -33,7 +33,7 @@ export async function getUser(ctx: Koa.Context, id: string): Promise<UserDocumen
 
     return id === "me"
         ? await ctx.state.getUser()
-        : await UserController.find(id);
+        : await ctx.state.db.users.find(id);
 }
 
 interface ListUsersOptions {
@@ -45,10 +45,10 @@ export async function listUsers(ctx: Koa.Context, opts: ListUsersOptions = {}): 
     if (!user) {
         return [];
     }
-    if (getRoleLevel(user.role) < AuthLevel.Manager) {
+    if (user.authLevel < AuthLevel.Manager) {
         return [user];
     } else {
-        return await UserController.list(opts.filter);
+        return await ctx.state.db.users.list(opts.filter);
     }
 }
 
@@ -77,7 +77,7 @@ export async function createUser(ctx: Koa.Context, opts: UserCreationOptions): P
         await ctx.testPermission(AuthLevel.Admin);
     }
 
-    const user = UserController.newDocument(opts);
+    const user = ctx.state.db.users.newDocument(opts);
     await user.setPassword(opts.password);
 
     try {
@@ -116,7 +116,7 @@ export async function updateUser(ctx: Koa.Context, opts: UserUpdateOptions): Pro
     const signedIn = await ctx.state.getUser();
     const user = isMe
         ? signedIn
-        : await UserController.find(opts.id);
+        : await ctx.state.db.users.find(opts.id);
 
     if (!user) {
         return undefined;
