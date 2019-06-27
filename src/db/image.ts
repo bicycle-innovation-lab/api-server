@@ -1,7 +1,7 @@
 import * as Mongoose from "mongoose";
 import {ObjectID} from "mongodb";
-import {ObjectId, prop} from "./utils";
 import {ReadStream} from "fs";
+import {cleanDocument, ObjectId, prop} from "./utils";
 import resize, {convert} from "../images/resize";
 import {bufferToStream, streamToBuffer} from "../images/buffers";
 import {uploadFile} from "./file";
@@ -64,6 +64,14 @@ const imageSchema = schema<Image>({
         height: prop(Number, [required]),
         fileId: prop(ObjectId, [required])
     }]
+}, {
+    toJSON: {
+        versionKey: false,
+        transform(doc, ret) {
+            ret.variants = (ret.variants as any[]).map(({_id, ...rest}) => rest);
+            return cleanDocument(ret);
+        }
+    }
 });
 export type ImageDocument = Image & Mongoose.Document;
 export const ImageController = Controller(
