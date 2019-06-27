@@ -1,9 +1,9 @@
 import * as Mongoose from "mongoose";
-import {ObjectId, prop, Reference} from "./utils";
+import {ObjectId, prop, Reference} from "./schema/utils";
 import {BikeDocument} from "./bike";
 import {UserDocument} from "./user";
 import {schema} from "./schema";
-import {ref, required} from "./modifiers";
+import {ref, required} from "./schema/modifiers";
 import Controller, {SlimDocument} from "./controller";
 
 export interface Booking extends SlimDocument {

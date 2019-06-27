@@ -1,10 +1,10 @@
 import * as Mongoose from "mongoose";
-import {cleanDocument, ObjectId, prop, Reference} from "./utils";
+import {cleanDocument, ObjectId, prop, Reference} from "./schema/utils";
 import {BookingDocument} from "./booking";
 import {ImageDocument} from "./image";
 import {allRoles, AuthLevel, getRoleLevel, Role} from "../auth/role";
 import {model, schema} from "./schema";
-import {def, inEnum, ref, required, unique} from "./modifiers";
+import {def, inEnum, ref, required, unique} from "./schema/modifiers";
 import {issueSessionToken} from "../auth/token";
 import {compare, hash} from "../auth/hash";
 import Controller, {SlimDocument} from "./controller";

@@ -1,7 +1,7 @@
 import * as Mongoose from "mongoose";
 import {ImageDocument} from "./image";
-import {ObjectId, prop, Reference} from "./utils";
-import {def, ref, required} from "./modifiers";
+import {ObjectId, prop, Reference} from "./schema/utils";
+import {def, ref, required} from "./schema/modifiers";
 import {schema} from "./schema";
 import {CategoryDocument} from "./category";
 import Controller, {SlimDocument} from "./controller";

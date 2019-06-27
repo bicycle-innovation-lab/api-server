@@ -1,12 +1,12 @@
 import * as Mongoose from "mongoose";
 import {ObjectID} from "mongodb";
 import {ReadStream} from "fs";
-import {cleanDocument, ObjectId, prop} from "./utils";
+import {cleanDocument, ObjectId, prop} from "./schema/utils";
 import resize, {convert} from "../images/resize";
 import {bufferToStream, streamToBuffer} from "../images/buffers";
 import {uploadFile} from "./file";
 import {schema} from "./schema";
-import {inEnum, required} from "./modifiers";
+import {inEnum, required} from "./schema/modifiers";
 import Controller, {SlimDocument} from "./controller";
 
 export enum ImageVariantType {
