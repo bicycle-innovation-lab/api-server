@@ -8,15 +8,15 @@ import {BikeController} from "../../db/bike";
 import {Filter} from "../../db/controller/filter";
 
 export async function getBooking(ctx: Koa.Context, id: string): Promise<BookingDocument | undefined> {
-    const filter: Filter<Booking> = {};
+    let filter: Filter<Booking> | string = id;
 
     // only managers and up can see bookings made by other users
     const signedIn = await ctx.state.getUser();
     if (getRoleLevel(signedIn.role) < AuthLevel.Manager) {
-        filter.user = signedIn.id;
+        filter = {id, user: signedIn.id};
     }
 
-    return await BookingController.find(id, filter) || undefined;
+    return await BookingController.find(filter) || undefined;
 }
 
 export interface ListBookingsOptions {

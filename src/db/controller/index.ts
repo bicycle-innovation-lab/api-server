@@ -1,7 +1,7 @@
 import {Document, HookSyncCallback, model as mongooseModel, Model, Schema} from "mongoose";
 import {convertFilterToMongoDB, Filter, ObjectFilter} from "./filter";
 
-type StaticMethod<T, R, STATICS> = (controller: Controller<T> & STATICS, ...params: any) => R;
+type StaticMethod<T, R, STATICS> = (this: Controller<T> & STATICS, ...params: any) => R;
 
 type Operations = 'validate' | 'save';
 
@@ -33,7 +33,7 @@ export interface Controller<T> {
 
     count(filter?: ObjectFilter<T & SlimDocument>): Promise<number>;
 
-    find(id: string, filter?: ObjectFilter<T & SlimDocument>): Promise<T & Document | nil>;
+    find(filter: string | ObjectFilter<T & SlimDocument>): Promise<T & Document | nil>;
 
     newDocument(doc: { [key in keyof T]?: T[key] }): T & Document;
 }
@@ -76,12 +76,15 @@ export default function Controller<T, STATICS extends StaticMethods<T>>(name: st
         count(filter = {}) {
             return model.count(convertFilterToMongoDB(filter)).exec();
         },
-        find(id) {
-            return model.findById(id).exec();
+        find(filter) {
+            if (typeof filter === "string")
+                return model.findById(filter).exec();
+            else return model.findOne(convertFilterToMongoDB(filter)).exec();
         },
         newDocument(doc) {
             return new model(doc);
-        }
+        },
+        ...(opts.staticMethods || {})
     };
     return Object.assign({}, opts.staticMethods, self);
 }
