@@ -3,7 +3,6 @@ import * as compose from "koa-compose";
 import RequirePermission from "../../../middleware/require-permissions";
 import {AuthLevel} from "../../../../auth/role";
 import * as Logic from "../../../logic/bookings";
-import * as QueryString from "../../utils/query-string";
 import {BookingFilterSchema} from "../../schema/bookings";
 
 export const GetOneBooking: Koa.Middleware = compose([
@@ -24,12 +23,9 @@ export const GetOneBooking: Koa.Middleware = compose([
 export const GetMultipleBookings: Koa.Middleware = compose([
     RequirePermission(AuthLevel.User),
     async ctx => {
-        const {filter: filterQuery} = ctx.query;
-        let filter;
-        if (filterQuery) {
-            const filterObj = QueryString.parseQuery(filterQuery);
-            filter = ctx.validate(BookingFilterSchema, filterObj)
-        }
+        const filter = ctx.query.filter
+            ? ctx.validateQuery(BookingFilterSchema, ctx.query.filter)
+            : undefined;
 
         const bookings = await Logic.listBookings(ctx, {filter});
 

@@ -18,6 +18,7 @@ declare module "koa" {
 
         validate(schema: Joi.Schema, doc: any): any;
         validateBody(schema: Joi.Schema): Promise<any>;
+        validateQuery(schema: Joi.Schema, query: string): any;
 
         state: {
             /** Returns the currently signed in user of the current session. */

@@ -3,8 +3,6 @@ import * as compose from "koa-compose";
 import * as Logic from "../../../logic/users";
 import RequirePermission from "../../../middleware/require-permissions";
 import {AuthLevel} from "../../../../auth/role";
-import * as QueryString from "../../utils/query-string";
-import {BookingFilterSchema} from "../../schema/bookings";
 import {UserFilterSchema} from "../../schema/users";
 
 export const GetOneUser: Koa.Middleware = compose([
@@ -25,12 +23,9 @@ export const GetOneUser: Koa.Middleware = compose([
 export const GetMultipleUsers: Koa.Middleware = compose([
     RequirePermission(AuthLevel.User),
     async ctx => {
-        const {filter: filterQuery} = ctx.query;
-        let filter;
-        if (filterQuery) {
-            const filterObj = QueryString.parseQuery(filterQuery);
-            filter = ctx.validate(UserFilterSchema, filterObj)
-        }
+        const filter = ctx.query.filter
+            ? ctx.validateQuery(UserFilterSchema, ctx.query.filter)
+            : undefined;
 
         const users = await Logic.listUsers(ctx, {filter});
         ctx.status = 200;
