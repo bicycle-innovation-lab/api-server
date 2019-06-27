@@ -2,9 +2,15 @@ import * as Koa from "koa";
 import {ObjectId} from "../../../schema/common";
 import * as Logic from "../../../logic/bikes";
 import * as BookingLogic from "../../../logic/bookings";
+import * as QueryString from "../../utils/query-string";
+import {BikeFilterSchema} from "../../schema/bikes";
 
 export const GetMultipleBikes: Koa.Middleware = async ctx => {
-    const bikes = await Logic.listBikes(ctx);
+    const {filter = ""} = ctx.query;
+    const filterObj = QueryString.parseQuery(filter);
+    const valid = ctx.validate(BikeFilterSchema, filterObj);
+
+    const bikes = await Logic.listBikes(ctx, valid);
 
     ctx.status = 200;
     return bikes;

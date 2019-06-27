@@ -36,6 +36,11 @@ describe("query-string", () => {
             QueryString.parseInlineQuery('first="value",second=20,bool=true')
                 .should.deep.eq({first: "value", second: 20, bool: true});
         });
+
+        it("should parse an empty string as an empty object", () => {
+            QueryString.parseInlineQuery("")
+                .should.deep.eq({});
+        })
     });
 
     describe("serializeQuery", () => {
