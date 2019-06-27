@@ -1,7 +1,6 @@
 import * as Joi from "joi";
 import * as JoiPhoneNumber from "joi-phone-number";
 import {allRoles} from "../../auth/role";
-import {exist} from "joi";
 
 export const joi: typeof Joi = Joi.extend(JoiPhoneNumber);
 
@@ -24,8 +23,4 @@ export const numberFilter = () => joi.alt().try(
         gte: joi.number(),
         gt: joi.when("gte", {is: joi.exist(), then: joi.forbidden(), otherwise: joi.number()})
     })
-        /*.when(joi.object({lt: joi.exist()}), {then: {lte: joi.forbidden()}})
-        .when(joi.object({lte: joi.exist()}), {then: {lt: joi.forbidden()}})
-        .when(joi.object({gt: joi.exist()}), {then: {gte: joi.forbidden()}})
-        .when(joi.object({gte: joi.exist()}), {then: {gt: joi.forbidden()}})*/
 );
