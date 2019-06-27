@@ -8,6 +8,7 @@ import PopulateUser from "./middleware/populate-user";
 import FormatResponse from "./middleware/format-message";
 import TestPermission from "./plugins/test-permissions";
 import JoiValidate from "./plugins/joi-validate";
+import AttachDB from "./middleware/attach-db";
 
 export const Server = new Koa();
 
@@ -16,6 +17,7 @@ TestPermission(Server);
 JoiValidate(Server);
 
 Server.use(KoaJWT({secret: Secret, passthrough: true, key: "authToken"}));
+Server.use(AttachDB);
 Server.use(PopulateUser);
 
 Server.use(FormatResponse);

@@ -1,5 +1,4 @@
 import * as Koa from "koa";
-import {UserController} from "../../db/user";
 import {TokenType} from "../../auth/token";
 
 const PopulateUser: Koa.Middleware = async (ctx, next) => {
@@ -15,7 +14,7 @@ const PopulateUser: Koa.Middleware = async (ctx, next) => {
         : undefined;
     ctx.state.getSubject = async () => {
         if (ctx.state.subject === undefined && ctx.state.authenticated) {
-            const subject = await UserController.find(ctx.state.authToken.sub);
+            const subject = await ctx.state.db.users.find(ctx.state.authToken.sub);
             if (!subject) {
                 ctx.state.subject = null;
             } else {
