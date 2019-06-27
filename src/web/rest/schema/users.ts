@@ -1,5 +1,5 @@
 import {Role as Roles} from "../../../auth/role";
-import {joi, Email, Password, Phone, Role, ObjectId} from "../../schema/common";
+import {joi, Email, Password, Phone, Role, ObjectId, singleOrArray} from "../../schema/common";
 
 export const CreateUserRequestSchema = joi.object({
     firstName: joi.string().required(),
@@ -32,3 +32,7 @@ export const UpdateUserRequestSchema = joi.object({
 export const ResetPasswordRequestSchema = joi.object({
     password: Password().required()
 }).required();
+
+export const UserFilterSchema = joi.object({
+    role: singleOrArray(Role)
+});
