@@ -7,9 +7,9 @@ import {model, schema} from "./schema";
 import {def, inEnum, ref, required, unique} from "./modifiers";
 import {issueSessionToken} from "../auth/token";
 import {compare, hash} from "../auth/hash";
-import Controller from "./controller";
+import Controller, {SlimDocument} from "./controller";
 
-interface User {
+export interface User extends SlimDocument {
     firstName: string;
     lastName: string;
     email: string;
