@@ -1,12 +1,10 @@
-FROM node:10
+FROM node:lts
 
 COPY package.json .
 COPY tsconfig.json .
 COPY /src ./src
 
 RUN npm install
-RUN npm install typescript -g
-RUN tsc
+RUN npm run build
 
-CMD [ "node", "./../dist/index.js" ]
-
+CMD [ "npm", "run", "start" ]
