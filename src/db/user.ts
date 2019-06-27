@@ -7,6 +7,7 @@ import {model, schema} from "./schema";
 import {def, inEnum, ref, required, unique} from "./modifiers";
 import {issueSessionToken} from "../auth/token";
 import {compare, hash} from "../auth/hash";
+import Controller from "./controller";
 
 interface User {
     firstName: string;
@@ -53,7 +54,7 @@ const userSchema = schema<User>({
 });
 export type UserDocument = User & Mongoose.Document;
 
-export const UserModel = model(
+export const UserController = Controller(
     "user",
     userSchema,
     {

@@ -1,7 +1,7 @@
 import * as Koa from "koa";
 import {Booking, BookingController, BookingDocument} from "../../db/booking";
 import {AuthLevel, getRoleLevel} from "../../auth/role";
-import {UserModel} from "../../db/user";
+import {UserController} from "../../db/user";
 import ValidationError from "./validation.error";
 import InvalidReferenceError from "./invalid-reference.error";
 import {BikeController} from "../../db/bike";
@@ -54,7 +54,7 @@ export async function createBooking(ctx: Koa.Context, opts: CreateBookingOptions
         await ctx.testPermission(AuthLevel.Manager);
 
         // check if the given user exists
-        const count = await UserModel.count({_id: opts.user}).exec();
+        const count = await UserController.count({id: opts.user});
         if (count <= 0) {
             throw new InvalidReferenceError(`User with id "${opts.user}" does not exist`);
         }
