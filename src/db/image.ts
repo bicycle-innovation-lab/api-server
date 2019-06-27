@@ -1,12 +1,13 @@
 import * as Mongoose from "mongoose";
 import {ObjectID} from "mongodb";
-import {ObjectId, prop} from "./utils";
 import {ReadStream} from "fs";
+import {cleanDocument, ObjectId, prop} from "./schema/utils";
 import resize, {convert} from "../images/resize";
 import {bufferToStream, streamToBuffer} from "../images/buffers";
 import {uploadFile} from "./file";
-import {model, schema} from "./schema";
-import {inEnum, required} from "./modifiers";
+import {schema} from "./schema";
+import {inEnum, required} from "./schema/modifiers";
+import Controller, {SlimDocument} from "./controller";
 
 export enum ImageVariantType {
     Original = "original",
@@ -46,7 +47,7 @@ interface ImageVariant {
     fileId: ObjectID;
 }
 
-export interface Image {
+export interface Image extends SlimDocument {
     fileName: string;
     title: string;
     alt: string;
@@ -63,9 +64,17 @@ const imageSchema = schema<Image>({
         height: prop(Number, [required]),
         fileId: prop(ObjectId, [required])
     }]
+}, {
+    toJSON: {
+        versionKey: false,
+        transform(doc, ret) {
+            ret.variants = (ret.variants as any[]).map(({_id, ...rest}) => rest);
+            return cleanDocument(ret);
+        }
+    }
 });
 export type ImageDocument = Image & Mongoose.Document;
-export const ImageModel = model(
+export const ImageController = Controller(
     "image",
     imageSchema,
     {
@@ -101,13 +110,12 @@ export const ImageModel = model(
                     };
                     resizedVariants.push(img);
                 }
-
-                return new ImageModel({
+                return this.newDocument({
                     fileName: name,
                     title,
                     alt,
                     variants: resizedVariants
-                })
+                });
             }
         }
     });

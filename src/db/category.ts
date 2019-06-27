@@ -1,10 +1,11 @@
 import * as Mongoose from "mongoose";
 import * as slug from "slug";
-import {ObjectId, prop, Reference} from "./utils";
+import {ObjectId, prop, Reference} from "./schema/utils";
 import {ImageDocument} from "./image";
 import {model, schema} from "./schema";
-import {ref, required, unique} from "./modifiers";
+import {ref, required, unique} from "./schema/modifiers";
 import {ObjectId as ObjectIdSchema} from "../web/schema/common";
+import Controller from "./controller";
 
 export interface Category {
     title: string;
@@ -21,7 +22,7 @@ const categorySchema = schema<Category>({
 });
 export type CategoryDocument = Category & Mongoose.Document;
 
-export const CategoryModel = model(
+export const CategoryController = Controller(
     "categories",
     categorySchema,
     {
@@ -32,11 +33,11 @@ export const CategoryModel = model(
             }
         },
         staticMethods: {
-            findBySlugOrId(id: string): Promise<CategoryDocument | null> {
+            findBySlugOrId(id: string): Promise<CategoryDocument | nil> {
                 if (ObjectIdSchema().validate(id).error) {
-                    return this.findOne({slug: id}).exec();
+                    return this.find({slug: id});
                 } else {
-                    return this.findById(id).exec();
+                    return this.find(id);
                 }
             }
         }

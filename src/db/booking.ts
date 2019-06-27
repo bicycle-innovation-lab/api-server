@@ -1,11 +1,12 @@
 import * as Mongoose from "mongoose";
-import {ObjectId, prop, Reference} from "./utils";
+import {ObjectId, prop, Reference} from "./schema/utils";
 import {BikeDocument} from "./bike";
 import {UserDocument} from "./user";
-import {model, schema} from "./schema";
-import {ref, required} from "./modifiers";
+import {schema} from "./schema";
+import {ref, required} from "./schema/modifiers";
+import Controller, {SlimDocument} from "./controller";
 
-export interface Booking {
+export interface Booking extends SlimDocument {
     startTime: Date;
     endTime: Date;
     bike: Reference<BikeDocument>;
@@ -19,4 +20,4 @@ const bookingSchema = schema<Booking>({
     user: prop(ObjectId, [required, ref("user")])
 });
 export type BookingDocument = Booking & Mongoose.Document;
-export const BookingModel = model("booking", bookingSchema);
+export const BookingController = Controller("booking", bookingSchema);

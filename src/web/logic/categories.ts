@@ -1,13 +1,13 @@
 import * as Koa from "koa";
-import {Category, CategoryDocument, CategoryModel} from "../../db/category";
+import {CategoryController, CategoryDocument} from "../../db/category";
 import {AuthLevel} from "../../auth/role";
 
 export async function getCategory(ctx: Koa.Context, id: string): Promise<CategoryDocument | undefined> {
-    return await CategoryModel.findBySlugOrId(id) || undefined;
+    return await CategoryController.findBySlugOrId(id) || undefined;
 }
 
 export async function listCategories(ctx: Koa.Context): Promise<CategoryDocument[]> {
-    return CategoryModel.find();
+    return CategoryController.list();
 }
 
 export interface CreateCategoryOptions {
@@ -27,7 +27,7 @@ export class SlugCollisionError extends Error {
 export async function createCategory(ctx: Koa.Context, opts: CreateCategoryOptions): Promise<CategoryDocument> {
     await ctx.testPermission(AuthLevel.Manager);
 
-    const category = new CategoryModel(opts);
+    const category = CategoryController.newDocument(opts);
     try {
         await category.save();
     } catch (err) {
@@ -50,7 +50,7 @@ export interface UpdateCategoryOptions {
 export async function updateCategory(ctx: Koa.Context, opts: UpdateCategoryOptions): Promise<CategoryDocument | undefined> {
     await ctx.testPermission(AuthLevel.Manager);
 
-    const category = await CategoryModel.findBySlugOrId(opts.id);
+    const category = await CategoryController.findBySlugOrId(opts.id);
     if (!category) {
         return undefined;
     }

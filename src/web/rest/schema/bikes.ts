@@ -1,4 +1,4 @@
-import {joi, ObjectId} from "../../schema/common";
+import {joi, numberFilter, ObjectId, singleOrArray} from "../../schema/common";
 
 export const CreateBikeRequestSchema = joi.object({
     title: joi.string().required(),
@@ -10,3 +10,7 @@ export const CreateBikeRequestSchema = joi.object({
 })
     .rename("featured_image", "featuredImage")
     .required();
+
+export const BikeFilterSchema = joi.object({
+    price: numberFilter()
+});

@@ -1,13 +1,14 @@
 import * as Koa from "koa";
-import {BikeDocument, BikeModel} from "../../db/bike";
+import {Bike, BikeController, BikeDocument} from "../../db/bike";
 import {AuthLevel} from "../../auth/role";
+import {Filter} from "../../db/controller/filter";
 
-export async function getBike(ctx: Koa.Context, id: string): Promise<BikeDocument | undefined> {
-    return await BikeModel.findOne({_id: id}) || undefined;
+export async function getBike(ctx: Koa.Context, id: string): Promise<BikeDocument | nil> {
+    return BikeController.find(id);
 }
 
-export async function listBikes(ctx: Koa.Context): Promise<BikeDocument[]> {
-    return BikeModel.find();
+export async function listBikes(ctx: Koa.Context, filter: Filter<Bike> = {}): Promise<BikeDocument[]> {
+    return BikeController.list(filter);
 }
 
 export interface CreateBikeOptions {
@@ -22,7 +23,7 @@ export interface CreateBikeOptions {
 export async function createBike(ctx: Koa.Context, opts: CreateBikeOptions): Promise<BikeDocument> {
     ctx.testPermission(AuthLevel.Manager);
 
-    const bike = new BikeModel(opts);
+    const bike = BikeController.newDocument(opts);
     await bike.save();
 
     return bike;

@@ -1,9 +1,10 @@
 import * as Koa from "koa";
-import {UserDocument, UserModel} from "../../db/user";
+import {User, UserController, UserDocument} from "../../db/user";
 import {AuthLevel, getRoleLevel, Role} from "../../auth/role";
 import {ObjectId} from "../schema/common";
 import InsufficientPermissionError from "./insufficient-permission.error";
 import IncorrectPasswordError from "./incorrect-password.error";
+import {Filter} from "../../db/controller/filter";
 
 /**
  * Tests if the currently signed in user can see the given user id. Returns true if the signed in user is manager or
@@ -32,10 +33,14 @@ export async function getUser(ctx: Koa.Context, id: string): Promise<UserDocumen
 
     return id === "me"
         ? await ctx.state.getUser()
-        : await UserModel.findOne({_id: id});
+        : await UserController.find(id);
 }
 
-export async function listUsers(ctx: Koa.Context): Promise<UserDocument[]> {
+interface ListUsersOptions {
+    filter?: Filter<User>;
+}
+
+export async function listUsers(ctx: Koa.Context, opts: ListUsersOptions = {}): Promise<UserDocument[]> {
     const user = await ctx.state.getUser();
     if (!user) {
         return [];
@@ -43,7 +48,7 @@ export async function listUsers(ctx: Koa.Context): Promise<UserDocument[]> {
     if (getRoleLevel(user.role) < AuthLevel.Manager) {
         return [user];
     } else {
-        return await UserModel.find();
+        return await UserController.list(opts.filter);
     }
 }
 
@@ -72,7 +77,7 @@ export async function createUser(ctx: Koa.Context, opts: UserCreationOptions): P
         await ctx.testPermission(AuthLevel.Admin);
     }
 
-    const user = new UserModel(opts);
+    const user = UserController.newDocument(opts);
     await user.setPassword(opts.password);
 
     try {
@@ -111,7 +116,7 @@ export async function updateUser(ctx: Koa.Context, opts: UserUpdateOptions): Pro
     const signedIn = await ctx.state.getUser();
     const user = isMe
         ? signedIn
-        : await UserModel.findOne({_id: opts.id});
+        : await UserController.find(opts.id);
 
     if (!user) {
         return undefined;

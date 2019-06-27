@@ -1,10 +1,10 @@
 import * as Koa from "koa";
-import {Image, ImageDocument, ImageModel, ImageVariantType} from "../../db/image";
+import {ImageController, ImageDocument, ImageVariantType} from "../../db/image";
 import {ReadStream} from "fs";
 import {AuthLevel} from "../../auth/role";
 
-export async function getImage(ctx: Koa.Context, id: string): Promise<ImageDocument | undefined> {
-    return await ImageModel.findOne({_id: id}) || undefined;
+export async function getImage(ctx: Koa.Context, id: string): Promise<ImageDocument | nil> {
+    return await ImageController.find(id);
 }
 
 export interface UploadImageOptions {
@@ -18,7 +18,7 @@ export interface UploadImageOptions {
 export async function uploadImage(ctx: Koa.Context, opts: UploadImageOptions): Promise<ImageDocument> {
     await ctx.testPermission(AuthLevel.Manager);
 
-    const image = await ImageModel.createImage(opts.filename, opts.title, opts.alt, opts.file, opts.variants);
+    const image = await ImageController.createImage(opts.filename, opts.title, opts.alt, opts.file, opts.variants);
     await image.save();
 
     return image;

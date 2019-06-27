@@ -3,13 +3,13 @@
 // The password is "admin"
 
 import Connect from "../db/connect";
-import {UserModel} from "../db/user";
+import {UserController} from "../db/user";
 import {Role} from "../auth/role";
 
 (async () => {
     await Connect();
 
-    const user = new UserModel({
+    const user = UserController.newDocument({
         firstName: "Admin",
         lastName: "Admin",
         email: "admin@example.com",
