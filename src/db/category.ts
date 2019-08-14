@@ -2,7 +2,7 @@ import * as Mongoose from "mongoose";
 import * as slug from "slug";
 import {ObjectId, prop, Reference} from "./schema/utils";
 import {ImageDocument} from "./image";
-import {model, schema} from "./schema";
+import {schema} from "./schema";
 import {ref, required, unique} from "./schema/modifiers";
 import {ObjectId as ObjectIdSchema} from "../web/schema/common";
 import Controller from "./controller";
