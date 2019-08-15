@@ -1,4 +1,4 @@
-import {dateFilter, joi, ObjectId} from "../../schema/common";
+import {dateFilter, joi, ObjectId, singleOrArray} from "../../schema/common";
 
 export const CreateBookingRequestSchema = joi.object({
     startTime: joi.date().required(),
@@ -11,6 +11,7 @@ export const CreateBookingRequestSchema = joi.object({
     .required();
 
 export const BookingFilterSchema = joi.object({
+    id: singleOrArray(() => joi.string()),
     startTime: dateFilter(),
     endTime: dateFilter()
 });
