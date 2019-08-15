@@ -12,6 +12,7 @@ export const CreateBikeRequestSchema = joi.object({
     .required();
 
 export const BikeFilterSchema = joi.object({
+    id: singleOrArray(() => joi.string()),
     price: numberFilter(),
     categories: singleOrArray(ObjectId)
 });
