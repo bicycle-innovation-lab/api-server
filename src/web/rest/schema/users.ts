@@ -34,5 +34,6 @@ export const ResetPasswordRequestSchema = joi.object({
 }).required();
 
 export const UserFilterSchema = joi.object({
+    id: singleOrArray(() => joi.string()),
     role: singleOrArray(Role)
 });

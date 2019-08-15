@@ -29,7 +29,7 @@ export function convertFilterToMongoDB(filter: ObjectFilter<any>) {
 
     function convert(key: string, filter?: Filter<any>) {
         if (key === "id") {
-            return {_id: filter};
+            key = "_id";
         }
         if (!filter) {
             return {};
