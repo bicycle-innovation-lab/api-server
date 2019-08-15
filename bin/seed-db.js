@@ -4,10 +4,10 @@ const {default: Connect} = require("../dist/db/connect");
 const {Role} = require("../dist/auth/role");
 const Chance = require("chance");
 const chance = new Chance();
-const {UserModel} = require("../dist/db/user");
-const {CategoryModel} = require("../dist/db/category");
-const {BikeModel} = require("../dist/db/bike");
-const {Image, ImageVariantType} = require("../dist/db/image");
+const {UserController} = require("../dist/db/user");
+const {CategoryController} = require("../dist/db/category");
+const {BikeController} = require("../dist/db/bike");
+const {ImageController, ImageVariantType} = require("../dist/db/image");
 
 (async () => {
     await Connect();
@@ -45,7 +45,7 @@ const {Image, ImageVariantType} = require("../dist/db/image");
                 phone: chance.phone(),
                 role: config.role
             };
-            const user = new UserModel(opts);
+            const user = UserController.newDocument(opts);
             await user.setPassword(password);
             await user.save();
         }
@@ -55,7 +55,7 @@ const {Image, ImageVariantType} = require("../dist/db/image");
     const namedCategories = {};
 
     for (const category of categories) {
-        const cat = new CategoryModel(category);
+        const cat = CategoryController.newDocument(category);
         await cat.save();
         category.id = cat._id;
         namedCategories[cat.slug] = cat._id;
@@ -69,7 +69,7 @@ const {Image, ImageVariantType} = require("../dist/db/image");
             console.log("Downloading image", image);
             const file = await downloadImage(image);
             console.log("Uploading...");
-            const img = await Image.createImage("image.png", bike.title, "Image", file, [
+            const img = await ImageController.createImage("image.png", bike.title, "Image", file, [
                 ImageVariantType.Original,
                 ImageVariantType.Large,
                 ImageVariantType.Small
@@ -80,7 +80,7 @@ const {Image, ImageVariantType} = require("../dist/db/image");
         }
         bike.categories = bike.category.map(it => namedCategories[it]);
 
-        const b = new BikeModel(bike);
+        const b = BikeController.newDocument(bike);
         await b.save();
     }
 
