@@ -35,6 +35,8 @@ export default interface Controller<T> {
 
     find(filter: string | ObjectFilter<T & SlimDocument>): Promise<T & Document | nil>;
 
+    update(id: string, update: T): Promise<boolean>;
+
     newDocument(doc: { [key in keyof T]?: T[key] }): T & Document;
 }
 
@@ -80,6 +82,11 @@ export default function Controller<T, STATICS extends StaticMethods<T>>(name: st
             if (typeof filter === "string")
                 return model.findById(filter).exec();
             else return model.findOne(convertFilterToMongoDB(filter)).exec();
+        },
+        async update(id, update) {
+            const {_id, ...withoutId} = update as any;
+            const response = await model.updateOne({_id: id}, withoutId);
+            return response.n >= 0;
         },
         newDocument(doc) {
             return new model(doc);

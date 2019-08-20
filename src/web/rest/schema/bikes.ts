@@ -16,3 +16,13 @@ export const BikeFilterSchema = joi.object({
     price: numberFilter(),
     categories: singleOrArray(ObjectId)
 });
+
+export const PatchBikeRequestSchema = joi.object({
+    title: joi.string(),
+    description: joi.string(),
+    price: joi.number(),
+    categories: joi.array().items(ObjectId()),
+    images: joi.array().items(ObjectId()),
+    featuredImage: joi.number().min(0)
+})
+    .rename("featured_image", "featuredImage");

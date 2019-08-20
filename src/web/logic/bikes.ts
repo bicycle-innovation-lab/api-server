@@ -21,10 +21,18 @@ export interface CreateBikeOptions {
 }
 
 export async function createBike(ctx: Koa.Context, opts: CreateBikeOptions): Promise<BikeDocument> {
-    ctx.testPermission(AuthLevel.Manager);
+    await ctx.testPermission(AuthLevel.Manager);
 
     const bike = ctx.state.db.bikes.newDocument(opts);
     await bike.save();
 
     return bike;
+}
+
+export type UpdateBikeOptions = Partial<CreateBikeOptions>;
+
+export async function updateBike(ctx: Koa.Context, id: string, opts: UpdateBikeOptions): Promise<boolean> {
+    await ctx.testPermission(AuthLevel.Manager);
+
+    return ctx.state.db.bikes.update(id, opts);
 }
