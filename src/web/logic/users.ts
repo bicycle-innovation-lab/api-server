@@ -31,9 +31,14 @@ export async function getUser(ctx: Koa.Context, id: string): Promise<UserDocumen
         return undefined;
     }
 
-    return id === "me"
+    const signedIn = await ctx.state.getUser();
+    const opts = signedIn.authLevel < AuthLevel.Manager ? {hideId: true} : {};
+
+    const user = id === "me"
         ? await ctx.state.getUser()
         : await ctx.state.db.users.find(id);
+
+    return user.toJSON(opts);
 }
 
 interface ListUsersOptions {
