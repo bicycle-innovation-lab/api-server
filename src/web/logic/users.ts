@@ -137,9 +137,15 @@ export async function updateUser(ctx: Koa.Context, opts: UserUpdateOptions): Pro
         }
         await user.setPassword(opts.password.new);
     }
+
+    // invalidate all old tokens when email changes
+    if (opts.email) {
+        user.email = opts.email;
+        user.invalidateTokens();
+    }
+
     user.firstName = opts.firstName || user.firstName;
     user.lastName = opts.lastName || user.lastName;
-    user.email = opts.email || user.email;
     user.phone = opts.phone || user.phone;
 
     await user.save();
@@ -150,4 +156,5 @@ export async function updateUser(ctx: Koa.Context, opts: UserUpdateOptions): Pro
 export async function resetUserPassword(ctx: Koa.Context, password: string): Promise<void> {
     const subject = await ctx.state.getSubject();
     await subject.setPassword(password);
+    await subject.save();
 }

@@ -1,10 +1,10 @@
 import * as Koa from "koa";
 import {TokenType} from "../../../../auth/token";
-import {ResetPasswordRequestSchema, UpdateUserRequestSchema} from "../../schema/users";
+import {ResetPasswordRequestSchema, PatchUserRequestSchema} from "../../schema/users";
 import * as Logic from "../../../logic/users";
 import {resetUserPassword} from "../../../logic/users";
 
-const PutUsers: Koa.Middleware = async ctx => {
+const PatchUser: Koa.Middleware = async ctx => {
     const {id} = ctx.params;
     if (ctx.state.authType === TokenType.PasswordReset) {
         const {password} = await ctx.validateBody(ResetPasswordRequestSchema);
@@ -12,7 +12,7 @@ const PutUsers: Koa.Middleware = async ctx => {
         ctx.status = 200;
         return;
     } else {
-        const form = await ctx.validateBody(UpdateUserRequestSchema);
+        const form = await ctx.validateBody(PatchUserRequestSchema);
         if (form.password) {
             form.password = {
                 current: form.currentPassword,
@@ -29,4 +29,4 @@ const PutUsers: Koa.Middleware = async ctx => {
     }
 };
 
-export default PutUsers;
+export default PatchUser;
