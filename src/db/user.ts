@@ -48,8 +48,12 @@ const userSchema = schema<User>({
 }, {
     toJSON: {
         versionKey: false,
-        transform(doc, ret) {
+        transform(doc, ret, opts) {
             const {passwordHash, tokensNotBefore, ...clean} = cleanDocument(ret);
+            if (opts.hideId) {
+                const {id, ...withoutId} = clean;
+                return withoutId;
+            }
             return clean;
         }
     }
