@@ -31,6 +31,8 @@ export interface User extends SlimDocument {
     comparePassword(this: UserDocument, password: string): Promise<boolean>;
 
     setPassword(this: UserDocument, password: string): Promise<void>;
+
+    invalidateTokens(this: UserDocument): void;
 }
 
 const userSchema = schema<User>({
@@ -65,9 +67,12 @@ export const UserController = Controller(
             comparePassword(password: string): Promise<boolean> {
                 return compare(this.passwordHash, password);
             },
+            invalidateTokens() {
+                this.tokensNotBefore = new Date(Date.now());
+            },
             async setPassword(password: string): Promise<void> {
                 this.passwordHash = await hash(password);
-                this.tokensNotBefore = new Date(Date.now());
+                this.invalidateTokens();
             }
         },
         virtuals: {
