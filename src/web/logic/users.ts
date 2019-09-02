@@ -32,11 +32,13 @@ export async function getUser(ctx: Koa.Context, id: string): Promise<UserDocumen
     }
 
     const signedIn = await ctx.state.getUser();
-    const opts = signedIn.authLevel < AuthLevel.Manager ? {hideId: true} : {};
 
     const user = id === "me"
         ? await ctx.state.getUser()
         : await ctx.state.db.users.find(id);
+
+    // only managers and up can see user ids
+    const opts = signedIn.authLevel < AuthLevel.Manager ? {hideId: true} : {};
 
     return user.toJSON(opts);
 }
@@ -54,6 +56,7 @@ export async function listUsers(ctx: Koa.Context, opts: ListUsersOptions = {}): 
         ? [user]
         : await ctx.state.db.users.list(opts.filter);
 
+    // only managers and up can see user ids
     const jsonOpts = user.authLevel < AuthLevel.Manager ? {hideId: true} : {};
 
     return users.map(it => it.toJSON(jsonOpts as any));
