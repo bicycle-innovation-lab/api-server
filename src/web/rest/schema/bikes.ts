@@ -4,6 +4,7 @@ export const CreateBikeRequestSchema = joi.object({
     title: joi.string().required(),
     description: joi.string().required(),
     price: joi.number().required(),
+    discount: joi.number().optional(),
     categories: joi.array().items(ObjectId()).default([]),
     images: joi.array().items(ObjectId()).default([]),
     featuredImage: joi.number().min(0).optional().default(0)
@@ -21,6 +22,7 @@ export const PatchBikeRequestSchema = joi.object({
     title: joi.string(),
     description: joi.string(),
     price: joi.number(),
+    discount: joi.number(),
     categories: joi.array().items(ObjectId()),
     images: joi.array().items(ObjectId()),
     featuredImage: joi.number().min(0)
