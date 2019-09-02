@@ -10,8 +10,8 @@ export const CreateUserRequestSchema = joi.object({
     role: Role().default(Roles.User).optional(),
     avatar: ObjectId().optional(),
 })
-    .rename("first_name", "firstName")
-    .rename("last_name", "lastName")
+    .rename("first_name", "firstName", {override: true, ignoreUndefined: true})
+    .rename("last_name", "lastName", {override: true, ignoreUndefined: true})
     .required();
 
 export const PatchUserRequestSchema = joi.object({
@@ -23,7 +23,10 @@ export const PatchUserRequestSchema = joi.object({
     currentPassword: Password(),
     role: Role(),
     avatar: ObjectId(),
-}).with("password", "currentPassword").required();
+})
+    .rename("first_name", "firstName", {override: true, ignoreUndefined: true})
+    .rename("last_name", "lastName", {override: true, ignoreUndefined: true})
+    .with("password", "currentPassword").required();
 
 export const ResetPasswordRequestSchema = joi.object({
     password: Password().required()
