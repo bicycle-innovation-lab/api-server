@@ -1,10 +1,15 @@
 FROM node:lts
 
-COPY package.json .
-COPY tsconfig.json .
-COPY /src ./src
+WORKDIR /app
+
+COPY package*.json ./
 
 RUN npm install
+
+COPY . .
+
 RUN npm run build
 
-CMD [ "npm", "run", "start" ]
+EXPOSE 3000
+
+CMD ["npm", "run", "start"]
