@@ -10,14 +10,13 @@ services:
       - api-server
   api-server:
     container_name: api-server
+    environment: 
+      - MONGODB_URL=mongodb://mongo/admin
+      - JWT_SECRET=${JWT_SECRET}
     restart: always
     build: .
-    ports:
-      - '3000:3000'
     links:
       - mongo
   mongo:
     container_name: mongo
     image: mongo
-    ports:
-      - '27017:27017'
