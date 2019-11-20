@@ -34,10 +34,28 @@ export async function listProjects(ctx: Koa.Context, opts: ListProjectsOptions =
 }
 
 export interface CreateProjectOptions {
-    startTime: Date;
-    endTime: Date;
-    bike: string;
-    user?: string;
+    image: string;
+    name: string;
+    startDate: Date;
+    endDate: Date;
+    address: {
+        streetName: string;
+        streetNumber: string;
+        city: string;
+        areaCode: string;
+        country: string;
+    };
+    managers: string[]
+    users: string[];
+    bikes: string[];
+    restrictions: {
+        duration:{
+            minDays: number;
+            maxDays: number;
+        };
+
+    }
+    
 }
 
 export async function createProject(ctx: Koa.Context, opts: CreateProjectOptions): Promise<ProjectDocument> {
