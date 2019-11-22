@@ -53,20 +53,18 @@ export interface CreateProjectOptions {
             minDays: number;
             maxDays: number;
         };
-
     }
-    
 }
 
 export async function createProject(ctx: Koa.Context, opts: CreateProjectOptions): Promise<ProjectDocument> {
     await ctx.testPermission(AuthLevel.User);
 
-    if (opts.endTime <= opts.startTime) {
+    if (opts.startDate <= opts.endDate) {
         throw new ValidationError("End time must be after start time");
     }
 
     // only managers can create bookings on behalf of another user
-    if (opts.user) {
+    if (opts.startDate) {
         await ctx.testPermission(AuthLevel.Manager);
 
         // check if the given user exists
