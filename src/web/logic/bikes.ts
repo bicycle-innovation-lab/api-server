@@ -34,5 +34,5 @@ export type UpdateBikeOptions = Partial<CreateBikeOptions>;
 export async function updateBike(ctx: Koa.Context, id: string, opts: UpdateBikeOptions): Promise<boolean> {
     await ctx.testPermission(AuthLevel.Manager);
 
-    return ctx.state.db.bikes.update(id, opts);
+    return ctx.state.db.bikes.update(id, opts as any);
 }

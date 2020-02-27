@@ -7,7 +7,7 @@ import {AuthLevel} from "../../../../auth/role";
 
 const PutCategories: Koa.Middleware = compose([
     RequirePermission(AuthLevel.Manager),
-    async ctx => {
+    async (ctx: Koa.Context) => {
         const {id} = ctx.params;
         const form = await ctx.validateBody(UpdateCategoryRequestSchema);
         form.id = id;

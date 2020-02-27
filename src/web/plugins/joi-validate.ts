@@ -11,7 +11,7 @@ export default function JoiValidate(app: Koa) {
         return value;
     });
 
-    app.context.validateBody = (async function (this: Koa.BaseContext, schema: Joi.Schema) {
+    app.context.validateBody = (async function (this: Koa.Context, schema: Joi.Schema) {
         const body = await this.request.json();
         return this.validate(schema, body);
     });

@@ -7,7 +7,7 @@ import {BookingFilterSchema} from "../../schema/bookings";
 
 export const GetOneBooking: Koa.Middleware = compose([
     RequirePermission(AuthLevel.User),
-    async ctx => {
+    async (ctx: Koa.Context) => {
         const {id} = ctx.params;
 
         const booking = await Logic.getBooking(ctx, id);

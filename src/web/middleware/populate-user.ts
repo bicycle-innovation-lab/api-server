@@ -12,6 +12,7 @@ const PopulateUser: Koa.Middleware = async (ctx, next) => {
     ctx.state.getUser = () => ctx.state.session
         ? ctx.state.getSubject()
         : undefined;
+
     ctx.state.getSubject = async () => {
         if (ctx.state.subject === undefined && ctx.state.authenticated) {
             const subject = await ctx.state.db.users.find(ctx.state.authToken.sub);

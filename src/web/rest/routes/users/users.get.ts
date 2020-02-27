@@ -7,7 +7,7 @@ import {UserFilterSchema} from "../../schema/users";
 
 export const GetOneUser: Koa.Middleware = compose([
     RequirePermission(AuthLevel.User),
-    async ctx => {
+    async (ctx: Koa.Context) => {
         const {id} = ctx.params;
 
         const user = await Logic.getUser(ctx, id);

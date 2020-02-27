@@ -10,8 +10,8 @@ export async function getBooking(ctx: Koa.Context, id: string): Promise<BookingD
 
     // only managers and up can see bookings made by other users
     const signedIn = await ctx.state.getUser();
-    if (getRoleLevel(signedIn.role) < AuthLevel.Manager) {
-        filter = {id, user: signedIn.id};
+    if (getRoleLevel(signedIn?.role) < AuthLevel.Manager) {
+        filter = {id, user: signedIn?.id};
     }
 
     return await ctx.state.db.bookings.find(filter) || undefined;
@@ -25,9 +25,10 @@ export async function listBookings(ctx: Koa.Context, opts: ListBookingsOptions =
     const filter: Filter<Booking> = Object.assign({}, opts.filter);
 
     // only managers and up can see bookings made by other users
+    // if signedIn is undefined then NotSignedIn = -1
     const signedIn = await ctx.state.getUser();
-    if (signedIn.authLevel < AuthLevel.Manager) {
-        filter.user = signedIn.id;
+    if (signedIn?.authLevel ?? -1 < AuthLevel.Manager) {
+        filter.user = signedIn?.id;
     }
 
     return await ctx.state.db.bookings.list(filter);
@@ -57,7 +58,7 @@ export async function createBooking(ctx: Koa.Context, opts: CreateBookingOptions
             throw new InvalidReferenceError(`User with id "${opts.user}" does not exist`);
         }
     } else {
-        opts.user = (await ctx.state.getUser()).id;
+        opts.user = (await ctx.state.getUser())?.id;
     }
 
     // check if the given bike exists

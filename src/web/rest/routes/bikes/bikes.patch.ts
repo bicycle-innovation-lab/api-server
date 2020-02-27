@@ -8,7 +8,7 @@ import {ObjectId} from "../../../schema/common";
 
 const PatchBike: Koa.Middleware = compose([
     RequirePermission(AuthLevel.Manager),
-    async ctx => {
+    async (ctx: Koa.Context) => {
         const {id} = ctx.params;
         if (ObjectId().validate(id).error) {
             return ctx.throw(404);

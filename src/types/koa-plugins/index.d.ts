@@ -22,7 +22,7 @@ declare module "koa" {
 
         state: {
             /** Returns the currently signed in user of the current session. */
-            getUser(): Promise<UserDocument | undefined>;
+            getUser(): Promise<UserDocument | undefined> | undefined;
             /** Returns the subject of the current authentication token. */
             getSubject(): Promise<UserDocument | undefined>
             authType: TokenType;

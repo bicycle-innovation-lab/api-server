@@ -38,9 +38,9 @@ export async function getUser(ctx: Koa.Context, id: string): Promise<UserDocumen
         : await ctx.state.db.users.find(id);
 
     // only managers and up can see user ids
-    const opts = signedIn.authLevel < AuthLevel.Manager ? {hideId: true} : {};
+    const opts = signedIn?.authLevel ?? AuthLevel.NotSignedIn < AuthLevel.Manager ? {hideId: true} : {};
 
-    return user.toJSON(opts);
+    return user?.toJSON(opts as any);
 }
 
 interface ListUsersOptions {
@@ -134,15 +134,16 @@ export async function updateUser(ctx: Koa.Context, opts: UserUpdateOptions): Pro
 
     // only admins can change user roles
     if (opts.role) {
-        if (signedIn.authLevel < AuthLevel.Admin) {
-            throw new InsufficientPermissionError(AuthLevel.Admin, signedIn.authLevel);
+        if (signedIn?.authLevel ?? AuthLevel.NotSignedIn < AuthLevel.Admin) {
+            // Fix actual auth level. Current solution is a hack
+            throw new InsufficientPermissionError(AuthLevel.Admin, signedIn?.authLevel ?? AuthLevel.NotSignedIn);
         }
         user.role = opts.role;
     }
 
     // users can only change their password if they supply their current password
     if (opts.password && isMe) {
-        if (!await signedIn.comparePassword(opts.password.current)) {
+        if (!await signedIn?.comparePassword(opts.password.current)) {
             throw new IncorrectPasswordError();
         }
         await user.setPassword(opts.password.new);
@@ -165,6 +166,6 @@ export async function updateUser(ctx: Koa.Context, opts: UserUpdateOptions): Pro
 
 export async function resetUserPassword(ctx: Koa.Context, password: string): Promise<void> {
     const subject = await ctx.state.getSubject();
-    await subject.setPassword(password);
-    await subject.save();
+    await subject?.setPassword(password);
+    await subject?.save();
 }
