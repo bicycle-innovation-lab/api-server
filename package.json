@@ -46,7 +46,7 @@
     "@types/koa-router": "^7.4.0",
     "@types/koa__cors": "^3.0.1",
     "@types/mocha": "^5.2.7",
-    "@types/mongoose": "^5.7.3",
+    "@types/mongoose": "^5.7.0",
     "@types/moo": "^0.5.1",
     "@types/sharp": "^0.22.3",
     "@types/slug": "^0.9.1",
