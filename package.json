@@ -48,7 +48,7 @@
     "@types/mocha": "^5.2.7",
     "@types/mongoose": "^5.7.0",
     "@types/moo": "^0.5.1",
-    "@types/sharp": "^0.22.3",
+    "@types/sharp": "^0.24.0",
     "@types/slug": "^0.9.1",
     "chai": "^4.2.0",
     "chance": "^1.1.4",
