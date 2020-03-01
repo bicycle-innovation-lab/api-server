@@ -40,7 +40,7 @@
     "@types/bcrypt": "^3.0.0",
     "@types/chai": "^4.2.8",
     "@types/joi": "^14.3.4",
-    "@types/jsonwebtoken": "^8.3.7",
+    "@types/jsonwebtoken": "^8.3.8",
     "@types/koa": "^2.11.0",
     "@types/koa-compose": "^3.2.5",
     "@types/koa-router": "^7.4.0",
@@ -52,7 +52,7 @@
     "@types/slug": "^0.9.1",
     "chai": "^4.2.0",
     "chance": "^1.1.4",
-    "dotenv": "^7.0.0",
+    "dotenv": "^8.2.0",
     "mocha": "^6.2.2",
     "nodemon": "^1.19.4",
     "typescript": "^3.7.5"
