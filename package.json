@@ -28,7 +28,7 @@
     "koa-body-parsers": "^3.1.0",
     "koa-compose": "^4.1.0",
     "koa-jwt": "^3.6.0",
-    "koa-router": "^7.4.0",
+    "koa-router": "^8.0.8",
     "mongoose": "^5.9.2",
     "moo": "^0.5.1",
     "sharp": "^0.22.1",
