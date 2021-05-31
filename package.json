@@ -41,7 +41,7 @@
     "@types/chai": "^4.2.9",
     "@types/joi": "^14.3.4",
     "@types/jsonwebtoken": "^8.3.8",
-    "@types/koa": "^2.11.2",
+    "@types/koa": "^2.13.3",
     "@types/koa-compose": "^3.2.5",
     "@types/koa-router": "^7.4.0",
     "@types/koa__cors": "^3.0.1",
